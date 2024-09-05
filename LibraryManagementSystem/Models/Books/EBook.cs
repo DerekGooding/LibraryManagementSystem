@@ -8,28 +8,17 @@ namespace LibraryManagementSystem.Models.Books
         private string _downloadLink = string.Empty;
         public string DownloadLink { get => _downloadLink; protected set => _downloadLink = ValidateURL(value); }
 
-        public EBook(string title, string author, string downloadLink) : base(title, author, BookType.Ebook)
-        {
-            DownloadLink = downloadLink;
-        }
+        public EBook(string title, string author, string downloadLink) : base(title, author, BookType.EBook) => DownloadLink = downloadLink;
 
-        public override string ToString()
-        {
-            return base.ToString() +
+        public override string ToString() => base.ToString() +
                 $"\n\tdownload link: '{DownloadLink}'";
-        }
 
         private static string ValidateURL(string url)
-        {
-            if (Validator.IsValidURL(url, out string result))
-                return result.Trim();
-
-            throw new ArgumentException("Invalid URL can't be set as a download link of an Ebook");
-        }
+            => Validator.IsValidURL(url, out string result)
+                ? result.Trim()
+                : throw new ArgumentException("Invalid URL can't be set as a download link of an EBook");
 
         public void Download()
-        {
-            Console.WriteLine($"Downloaded e-book with title {Title}");
-        }
+            => Console.WriteLine($"Downloaded e-book with title {Title}");
     }
 }

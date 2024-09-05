@@ -13,18 +13,13 @@ namespace LibraryManagementSystem.Models.Books
         public enum BookType
         {
             Physical,
-            Ebook
+            EBook,
         }
-
-        private readonly string _bookId = CustomUtils.GenerateUniqueID(0, BOOK_ID_LENGTH);
-        private readonly string _ISBN = CustomUtils.GenerateUniqueID(); // 13 digit unique number
         private string _title = string.Empty;
         private string _author = string.Empty;
-        private bool _isBorrowed = false;
-        private BookType _type;
 
         public static List<string> BookTypeNames = Enum.GetNames(typeof(BookType)).ToList();
-        public string BookId { get => _bookId; }
+        public string BookId { get; } = CustomUtils.GenerateUniqueID(0, BOOK_ID_LENGTH);
 
         public string Title
         {
@@ -48,10 +43,9 @@ namespace LibraryManagementSystem.Models.Books
             }
         }
 
-        public string ISBN { get => _ISBN; }
-        public bool IsBorrowed
-        { get => _isBorrowed; protected set { _isBorrowed = value; } }
-        public BookType Type { get => _type; protected set => _type = value; }
+        public string ISBN { get; } = CustomUtils.GenerateUniqueID();
+        public bool IsBorrowed { get; protected set; }
+        public BookType Type { get; protected set; }
 
         protected Book(string title, string author, BookType type)
         {
@@ -60,12 +54,9 @@ namespace LibraryManagementSystem.Models.Books
             Type = type;
         }
 
-        public override string ToString()
-        {
-            return $"Book details\n\tbook id: '{BookId}',\n\ttitle: '{Title}'," +
+        public override string ToString() => $"Book details\n\tbook id: '{BookId}',\n\ttitle: '{Title}'," +
                 $"\n\tauthor: '{Author}',\n\tISBN: '{ISBN}',\n\tisBorrowed: {IsBorrowed}," +
                 $"\n\ttype: {Type}";
-        }
 
         // uniqueness = title + author + type
         public override bool Equals(object obj)

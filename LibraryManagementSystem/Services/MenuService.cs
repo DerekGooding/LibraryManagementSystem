@@ -69,7 +69,7 @@ namespace LibraryManagementSystem.Services
                 {
                     Console.WriteLine("[ALERT]: Enter valid action number from Menu\n");
                     continue;
-                };
+                }
 
                 // TODO: get total actions
                 //int totalActions = Enum.GetValues(typeof(Actions)).Length;
@@ -81,7 +81,7 @@ namespace LibraryManagementSystem.Services
                 {
                     Console.WriteLine("[ALERT]: Enter valid action number from Menu\n");
                     continue;
-                };
+                }
 
                 userInput = userInputInt;
                 askUserInput = false;

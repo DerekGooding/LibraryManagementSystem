@@ -11,22 +11,22 @@ namespace LibraryManagementSystem.Services
 {
     internal class LibManagementSystem : ILibraryService
     {
-        private HashSet<Member> Members { get; set; } = new HashSet<Member>();
-        private HashSet<Book> Books { get; set; } = new HashSet<Book>();
+        private HashSet<Member> Members { get; } = new HashSet<Member>();
+        private HashSet<Book> Books { get; } = new HashSet<Book>();
 
-        // drived class props
-        public ReadOnlyCollection<StudentMember> StudentMembers { get => Members.OfType<StudentMember>().ToList().AsReadOnly(); }
+        // derived class props
+        public ReadOnlyCollection<StudentMember> StudentMembers => Members.OfType<StudentMember>().ToList().AsReadOnly();
 
-        public ReadOnlyCollection<TeacherMember> TeacherMembers { get => Members.OfType<TeacherMember>().ToList().AsReadOnly(); }
-        public ReadOnlyCollection<PhysicalBook> PhysicalBooks { get => Books.OfType<PhysicalBook>().ToList().AsReadOnly(); }
-        public ReadOnlyCollection<EBook> EBooks { get => Books.OfType<EBook>().ToList().AsReadOnly(); }
-        public long TotalStudentMembersCount { get => StudentMembers.Count; }
-        public long TotalTeacherMembersCount { get => TeacherMembers.Count; }
-        public long TotalMembersCount { get => TotalStudentMembersCount + TotalTeacherMembersCount; }
-        public long TotalBorrowedPhysicalBooks { get => Books.OfType<PhysicalBook>().ToList().FindAll(book => book.IsBorrowed).Count; }
-        public long TotalBorrowedEBooks { get => Books.OfType<EBook>().ToList().FindAll(book => book.IsBorrowed).Count; }
-        public ReadOnlyCollection<string> PhysicalBookTitlesList { get => Books.OfType<PhysicalBook>().ToList().ConvertAll(book => book.Title).AsReadOnly(); }
-        public ReadOnlyCollection<string> EBookTitlesList { get => Books.OfType<EBook>().ToList().ConvertAll(book => book.Title).AsReadOnly(); }
+        public ReadOnlyCollection<TeacherMember> TeacherMembers => Members.OfType<TeacherMember>().ToList().AsReadOnly();
+        public ReadOnlyCollection<PhysicalBook> PhysicalBooks => Books.OfType<PhysicalBook>().ToList().AsReadOnly();
+        public ReadOnlyCollection<EBook> EBooks => Books.OfType<EBook>().ToList().AsReadOnly();
+        public long TotalStudentMembersCount => StudentMembers.Count;
+        public long TotalTeacherMembersCount => TeacherMembers.Count;
+        public long TotalMembersCount => TotalStudentMembersCount + TotalTeacherMembersCount;
+        public long TotalBorrowedPhysicalBooks => Books.OfType<PhysicalBook>().ToList().FindAll(book => book.IsBorrowed).Count;
+        public long TotalBorrowedEBooks => Books.OfType<EBook>().ToList().FindAll(book => book.IsBorrowed).Count;
+        public ReadOnlyCollection<string> PhysicalBookTitlesList => Books.OfType<PhysicalBook>().ToList().ConvertAll(book => book.Title).AsReadOnly();
+        public ReadOnlyCollection<string> EBookTitlesList => Books.OfType<EBook>().ToList().ConvertAll(book => book.Title).AsReadOnly();
 
         public ReadOnlyCollection<string> AllBookTitlesList
         {
@@ -39,7 +39,7 @@ namespace LibraryManagementSystem.Services
             }
         }
 
-        public long TotalBooksCount { get => PhysicalBooks.Count + EBooks.Count; }
+        public long TotalBooksCount => PhysicalBooks.Count + EBooks.Count;
 
         //methods
         // done
@@ -54,7 +54,7 @@ namespace LibraryManagementSystem.Services
             // validation: first name input
             if (Validator.IsStringNullOrEmptyOrWhitespace(firstName))
             {
-                Console.WriteLine($"[Invalid Input]: member's firstname can't be empty, or only contains whitespace, entered value = '{firstName}'");
+                Console.WriteLine($"[Invalid Input]: member's firstName can't be empty, or only contains whitespace, entered value = '{firstName}'");
                 return;
             }
 
@@ -137,7 +137,7 @@ namespace LibraryManagementSystem.Services
 
             // checking if member exists
             Member member = Members.FirstOrDefault(m => m.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
-            if (!(member == null))
+            if (member != null)
             {
                 operationSuccess = true;
                 result = member;
@@ -197,10 +197,10 @@ namespace LibraryManagementSystem.Services
                 Book newBook = new PhysicalBook(title: bookTitle, author: BookAuthor, shelfLocation: bookShelfLocation);
                 bool bookAdded = Books.Add(newBook);
 
-                // checking if book already exists in the "books" hashset, if not book added then it already exists
+                // checking if book already exists in the "books" hash set, if not book added then it already exists
                 if (!bookAdded)
                 {
-                    Console.WriteLine($"[ALERT]: Physical book with the following details already exists in the system!!");
+                    Console.WriteLine("[ALERT]: Physical book with the following details already exists in the system!!");
                     Console.WriteLine(newBook);
                     return;
                 }
@@ -208,7 +208,7 @@ namespace LibraryManagementSystem.Services
                 Console.WriteLine("[SUCCESS]: Physical book has been successfully added to the system!!");
                 Console.WriteLine(newBook);
             }
-            else if (selectedBookType.Equals(Book.BookType.Ebook))  // for e-book creation
+            else if (selectedBookType.Equals(Book.BookType.EBook))  // for e-book creation
             {
                 // book download link input
                 Console.Write("Enter book download link: ");
@@ -232,10 +232,10 @@ namespace LibraryManagementSystem.Services
                 Book newBook = new EBook(title: bookTitle, author: BookAuthor, downloadLink: downloadLink);
                 bool bookAdded = Books.Add(newBook);
 
-                // checking if book already exists in the "books" hashset, if not book added then it already exists
+                // checking if book already exists in the "books" hash set, if not book added then it already exists
                 if (!bookAdded)
                 {
-                    Console.WriteLine($"[ALERT]: E-book with the following details already exists in the system!!");
+                    Console.WriteLine("[ALERT]: E-book with the following details already exists in the system!!");
                     Console.WriteLine(newBook);
                     return;
                 }
@@ -252,7 +252,7 @@ namespace LibraryManagementSystem.Services
 
         /*
              *  Flow:
-             *  - input member email with email validation, if member exists then book can be borowed and if not, then not
+             *  - input member email with email validation, if member exists then book can be borrowed and if not, then not
              *  - if member exists, ask book details
              *  -   input title, author and type with their validation
              *      - check if book exists
@@ -451,7 +451,7 @@ namespace LibraryManagementSystem.Services
                     return;
                 }
 
-                Console.WriteLine($"[ERROR]: Book wasn't borrowed by you!!");
+                Console.WriteLine("[ERROR]: Book wasn't borrowed by you!!");
                 return;
             }
 

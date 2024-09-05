@@ -16,29 +16,30 @@ namespace LibraryManagementSystem.Models.Member
         }
 
         private const int MEMBER_ID_LENGTH = 8;
-
-        private readonly string _memberId = CustomUtils.GenerateUniqueID(0, MEMBER_ID_LENGTH);
         private string _firstName = string.Empty;
         private string _lastName = string.Empty;
         private string _email = string.Empty; // unique prop
-        private MemberType _type;
 
         protected HashSet<string> BorrowedBookIds { get; set; } = new HashSet<string>();
         public static readonly List<string> MemberTypeNames = Enum.GetNames(typeof(MemberType)).ToList();
-        public MemberType Type { get => _type; protected set => _type = value; }
-        public string Name { get => $"{FirstName} {LastName}"; }
-        public string MemberId { get => _memberId; }
+        public MemberType Type { get; protected set; }
+        public string Name => $"{FirstName} {LastName}";
+        public string MemberId { get; } = CustomUtils.GenerateUniqueID(0, MEMBER_ID_LENGTH);
 
         public string FirstName
         {
             get => _firstName;
-            protected set => _firstName = !string.IsNullOrWhiteSpace(value) && !string.IsNullOrEmpty(value) ? value.Trim().ToLower() : string.Empty;
+            protected set => _firstName = !string.IsNullOrWhiteSpace(value) && !string.IsNullOrEmpty(value)
+                ? value.Trim().ToLower()
+                : string.Empty;
         }
 
         public string LastName
         {
             get => _lastName;
-            protected set => _lastName = !string.IsNullOrWhiteSpace(value) && !string.IsNullOrEmpty(value) ? value.Trim().ToLower() : string.Empty;
+            protected set => _lastName = !string.IsNullOrWhiteSpace(value) && !string.IsNullOrEmpty(value)
+                ? value.Trim().ToLower()
+                : string.Empty;
         }
 
         public string Email
@@ -67,14 +68,13 @@ namespace LibraryManagementSystem.Models.Member
         public override int GetHashCode() => Email.GetHashCode();
 
         public override string ToString()
-        {
-            return $"Member details:\n\tid: '{MemberId}'" +
+            => $"Member details:\n\tid: '{MemberId}'" +
                 $"\n\tname: '{Name}'" +
                 $"\n\temail: '{Email}'" +
                 $"\n\ttype: '{Type}'";
-        }
 
-        public static bool SelectMemberTypeUsingMenuSelector(out MemberType result, string message = "Use the arrow keys to navigate and press Enter to select member type:")
+        public static bool SelectMemberTypeUsingMenuSelector(out MemberType result,
+            string message = "Use the arrow keys to navigate and press Enter to select member type:")
         {
             string selectedMemberTypeInput = MenuSelector.SelectOption(MemberTypeNames, message);
             bool isValidSelectedMemberType = Enum.TryParse(selectedMemberTypeInput, false, out MemberType validMemberType);
@@ -118,7 +118,7 @@ namespace LibraryManagementSystem.Models.Member
                 return false;
             }
 
-            if (!(bookId.Length == 8))
+            if (bookId.Length != 8)
             {
                 validationError = true;
                 return false;

@@ -9,16 +9,10 @@
         public string ShelfLocation { get; set; } = string.Empty;
 
         public PhysicalBook(string title, string author, string shelfLocation) : base(title, author, BookType.Physical)
-        {
-            ShelfLocation = shelfLocation;
-        }
+            => ShelfLocation = shelfLocation;
 
         public int CalculatePhysicalBookWeight() => 12;
 
-        public override string ToString()
-        {
-            return base.ToString() +
-                $"\n\tShelf-location: '{ShelfLocation}'";
-        }
+        public override string ToString() => base.ToString() + $"\n\tShelf-location: '{ShelfLocation}'";
     }
 }

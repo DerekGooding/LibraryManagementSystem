@@ -4,16 +4,15 @@ namespace LibraryManagementSystem.Models.Member
 {
     internal class TeacherMember : Member
     {
-        private readonly string _teacherId = CustomUtils.GenerateUniqueID(0, 8);
-        public string TeacherId { get => _teacherId; }
+        public string TeacherId { get; } = CustomUtils.GenerateUniqueID(0, 8);
 
-        public TeacherMember(string firstName, string lastName, string email) : base(firstName: firstName, lastName: lastName, email: email, type: MemberType.Teacher)
+        public TeacherMember(
+            string firstName,
+            string lastName,
+            string email) : base(firstName: firstName, lastName: lastName, email: email, type: MemberType.Teacher)
         {
         }
 
-        public override string ToString()
-        {
-            return base.ToString() + $"\n\tteacher id: '{TeacherId}'";
-        }
+        public override string ToString() => base.ToString() + $"\n\tteacher id: '{TeacherId}'";
     }
 }
