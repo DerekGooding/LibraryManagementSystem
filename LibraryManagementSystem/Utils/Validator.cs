@@ -1,5 +1,4 @@
-﻿
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace LibraryManagementSystem.Utils
 {
@@ -27,6 +26,7 @@ namespace LibraryManagementSystem.Utils
 
             return isValid;
         }
+
         public static bool IsValidEmail(string email)
         {
             // if email is null, empty or white space then return false

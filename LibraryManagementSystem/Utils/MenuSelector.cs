@@ -15,7 +15,6 @@ namespace LibraryManagementSystem.Utils
             // Store the initial cursor position
             int cursorTop = Console.CursorTop;
 
-
             do
             {
                 // Display the options
@@ -39,7 +38,7 @@ namespace LibraryManagementSystem.Utils
 
                 // Capture the key press
                 key = Console.ReadKey(true).Key;
-                if(beepSound) Console.Beep();
+                if (beepSound) Console.Beep();
 
                 // Update the current selection based on the key press
                 if (key == ConsoleKey.UpArrow)
@@ -54,7 +53,6 @@ namespace LibraryManagementSystem.Utils
                     if (currentSelection >= options.Count)
                         currentSelection = 0;
                 }
-
             } while (key != ConsoleKey.Enter);
 
             // Return the selected option

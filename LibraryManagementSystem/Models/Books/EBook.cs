@@ -1,11 +1,11 @@
-﻿using System;
-using LibraryManagementSystem.Utils;
+﻿using LibraryManagementSystem.Utils;
+using System;
 
 namespace LibraryManagementSystem.Models.Books
 {
     internal class EBook : Book
     {
-        string _downloadLink = string.Empty;
+        private string _downloadLink = string.Empty;
         public string DownloadLink { get => _downloadLink; protected set => _downloadLink = ValidateURL(value); }
 
         public EBook(string title, string author, string downloadLink) : base(title, author, BookType.Ebook)
@@ -13,14 +13,13 @@ namespace LibraryManagementSystem.Models.Books
             DownloadLink = downloadLink;
         }
 
-
         public override string ToString()
         {
             return base.ToString() +
                 $"\n\tdownload link: '{DownloadLink}'";
         }
 
-        static string ValidateURL(string url)
+        private static string ValidateURL(string url)
         {
             if (Validator.IsValidURL(url, out string result))
                 return result.Trim();
@@ -32,6 +31,5 @@ namespace LibraryManagementSystem.Models.Books
         {
             Console.WriteLine($"Downloaded e-book with title {Title}");
         }
-
     }
 }

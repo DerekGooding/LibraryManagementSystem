@@ -1,15 +1,14 @@
-﻿using System;
+﻿using LibraryManagementSystem.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using LibraryManagementSystem.Utils;
 
 namespace LibraryManagementSystem.Models.Books
 {
-
     // uniqueness = title + author + type
     internal abstract class Book
     {
-        const int BOOK_ID_LENGTH = 8;
+        private const int BOOK_ID_LENGTH = 8;
 
         public enum BookType
         {
@@ -17,15 +16,16 @@ namespace LibraryManagementSystem.Models.Books
             Ebook
         }
 
-        readonly string _bookId = CustomUtils.GenerateUniqueID(0, BOOK_ID_LENGTH);
-        readonly string _ISBN = CustomUtils.GenerateUniqueID(); // 13 digit unique number
-        string _title = string.Empty;
-        string _author = string.Empty;
-        bool _isBorrowed = false;
-        BookType _type;
+        private readonly string _bookId = CustomUtils.GenerateUniqueID(0, BOOK_ID_LENGTH);
+        private readonly string _ISBN = CustomUtils.GenerateUniqueID(); // 13 digit unique number
+        private string _title = string.Empty;
+        private string _author = string.Empty;
+        private bool _isBorrowed = false;
+        private BookType _type;
 
         public static List<string> BookTypeNames = Enum.GetNames(typeof(BookType)).ToList();
         public string BookId { get => _bookId; }
+
         public string Title
         {
             get => _title;
@@ -36,6 +36,7 @@ namespace LibraryManagementSystem.Models.Books
                 _title = value.Trim().ToLower();
             }
         }
+
         public string Author
         {
             get => _author;
@@ -46,8 +47,10 @@ namespace LibraryManagementSystem.Models.Books
                 _author = value.Trim();
             }
         }
+
         public string ISBN { get => _ISBN; }
-        public bool IsBorrowed { get => _isBorrowed; protected set { _isBorrowed = value; } }
+        public bool IsBorrowed
+        { get => _isBorrowed; protected set { _isBorrowed = value; } }
         public BookType Type { get => _type; protected set => _type = value; }
 
         protected Book(string title, string author, BookType type)

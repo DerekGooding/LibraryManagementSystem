@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using LibraryManagementSystem.Interfaces.Infrastructure.Services;
 using LibraryManagementSystem.Models.Books;
 using LibraryManagementSystem.Models.Member;
 using LibraryManagementSystem.Utils;
-using LibraryManagementSystem.Interfaces.Infrastrcture.Services;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace LibraryManagementSystem.Services
 {
@@ -16,6 +16,7 @@ namespace LibraryManagementSystem.Services
 
         // drived class props
         public ReadOnlyCollection<StudentMember> StudentMembers { get => Members.OfType<StudentMember>().ToList().AsReadOnly(); }
+
         public ReadOnlyCollection<TeacherMember> TeacherMembers { get => Members.OfType<TeacherMember>().ToList().AsReadOnly(); }
         public ReadOnlyCollection<PhysicalBook> PhysicalBooks { get => Books.OfType<PhysicalBook>().ToList().AsReadOnly(); }
         public ReadOnlyCollection<EBook> EBooks { get => Books.OfType<EBook>().ToList().AsReadOnly(); }
@@ -26,6 +27,7 @@ namespace LibraryManagementSystem.Services
         public long TotalBorrowedEBooks { get => Books.OfType<EBook>().ToList().FindAll(book => book.IsBorrowed).Count; }
         public ReadOnlyCollection<string> PhysicalBookTitlesList { get => Books.OfType<PhysicalBook>().ToList().ConvertAll(book => book.Title).AsReadOnly(); }
         public ReadOnlyCollection<string> EBookTitlesList { get => Books.OfType<EBook>().ToList().ConvertAll(book => book.Title).AsReadOnly(); }
+
         public ReadOnlyCollection<string> AllBookTitlesList
         {
             get
@@ -36,6 +38,7 @@ namespace LibraryManagementSystem.Services
                 return new ReadOnlyCollection<string>(_allBookTitlesList);
             }
         }
+
         public long TotalBooksCount { get => PhysicalBooks.Count + EBooks.Count; }
 
         //methods
@@ -122,7 +125,7 @@ namespace LibraryManagementSystem.Services
         }
 
         // bool to check if some kind of error while finding member or if member exists or not
-        bool FindMemberByEmail(string email, out Member result)
+        private bool FindMemberByEmail(string email, out Member result)
         {
             bool operationSuccess = false;
             result = null;
@@ -248,7 +251,7 @@ namespace LibraryManagementSystem.Services
         }
 
         /*
-             *  Flow: 
+             *  Flow:
              *  - input member email with email validation, if member exists then book can be borowed and if not, then not
              *  - if member exists, ask book details
              *  -   input title, author and type with their validation
@@ -262,6 +265,7 @@ namespace LibraryManagementSystem.Services
              *                      - add book id to the borrowed books list of member
              *          -   if not, then alert user
         */
+
         public void BorrowBook()
         {
             // member email input
@@ -317,7 +321,7 @@ namespace LibraryManagementSystem.Services
                 return;
             }
 
-            // checking if book exists with given book details 
+            // checking if book exists with given book details
             Book book = Books.FirstOrDefault(_book => _book.Title.Equals(bookTitle) && _book.Author.Equals(bookAuthor) && _book.Type.Equals(selectedBookType));
             if (book == null)
             {
@@ -345,7 +349,7 @@ namespace LibraryManagementSystem.Services
                 return;
             }
 
-            // set book isBorrowed to true 
+            // set book isBorrowed to true
             book.BorrowBook();
 
             Console.WriteLine($"[SUCCESS]: Book with title: '{bookTitle}' has been successfully borrowed by member with name: '{member.Name}' and email: '{member.Email}'");
@@ -363,9 +367,10 @@ namespace LibraryManagementSystem.Services
           *                             -   call returnBook method on both book and member
           *                         -   if book not borrowed by member, alert user
           *                 -   if book not borrowed, alert user
-          *             -   if book doesn't exist then alert user    
+          *             -   if book doesn't exist then alert user
           *     -   if member doesn't exists, alert user to register
           */
+
         public void ReturnBook()
         {
             // member email input
@@ -421,7 +426,7 @@ namespace LibraryManagementSystem.Services
                 return;
             }
 
-            // checking if book exists with given book details 
+            // checking if book exists with given book details
             Book book = Books.FirstOrDefault(_book => _book.Title.Equals(bookTitle) && _book.Author.Equals(bookAuthor) && _book.Type.Equals(selectedBookType));
             if (book == null)
             {

@@ -3,6 +3,7 @@
     /*
      * TODO: Add book copies
     */
+
     internal class PhysicalBook : Book
     {
         public string ShelfLocation { get; set; } = string.Empty;

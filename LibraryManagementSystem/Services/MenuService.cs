@@ -1,20 +1,17 @@
-﻿using System;
-using LibraryManagementSystem.Models.Books;
-using LibraryManagementSystem.Models.Member;
-using LibraryManagementSystem.Utils;
-using System.Collections.Generic;
+﻿using LibraryManagementSystem.Utils;
+using System;
 
 namespace LibraryManagementSystem.Services
 {
     internal static class MenuService
     {
-        const string ADD_BOOK_ACTION_TEXT = "[ACTION]: Add Book";
-        const string BORROW_BOOK_ACTION_TEXT = "[ACTION]: Borrow book";
-        const string RETURN_BOOK_ACTION_TEXT = "[ACTION]: Return book";
-        const string REGISTER_MEMBER_TEXT = "[ACTION]: Register Member";
+        private const string ADD_BOOK_ACTION_TEXT = "[ACTION]: Add Book";
+        private const string BORROW_BOOK_ACTION_TEXT = "[ACTION]: Borrow book";
+        private const string RETURN_BOOK_ACTION_TEXT = "[ACTION]: Return book";
+        private const string REGISTER_MEMBER_TEXT = "[ACTION]: Register Member";
 
         // update min and max of IntInValidRange() upon updating Actions
-        enum Actions
+        private enum Actions
         {
             ClearConsole = -2,
             Exit,
@@ -34,7 +31,7 @@ namespace LibraryManagementSystem.Services
             GetTotalStudentMembersCount
         }
 
-        static void DisplayMenu()
+        private static void DisplayMenu()
         {
             // update Actions enum upon updating Menu
             Console.WriteLine("[MENU]:");
@@ -57,8 +54,7 @@ namespace LibraryManagementSystem.Services
             Console.Write("\n");
         }
 
-
-        static int AskUserValidActionNumber()
+        private static int AskUserValidActionNumber()
         {
             bool askUserInput = true;
             int userInput = 0;
@@ -94,7 +90,6 @@ namespace LibraryManagementSystem.Services
             return userInput;
         }
 
-
         public static void Start()
         {
             LibManagementSystem libraryManagementSystem = new LibManagementSystem();
@@ -113,10 +108,12 @@ namespace LibraryManagementSystem.Services
                         Console.Clear();
                         DisplayMenu();
                         break;
+
                     case (int)Actions.Exit:
                         Environment.Exit(0);
                         //AskActionNumberUserInput = false;
                         break;
+
                     case (int)Actions.DisplayMenu:
                         Console.WriteLine();
                         DisplayMenu();
@@ -125,53 +122,64 @@ namespace LibraryManagementSystem.Services
                         Console.WriteLine($"\n{ADD_BOOK_ACTION_TEXT}");
                         libraryManagementSystem.AddBook();
                         break;
+
                     case (int)Actions.ReturnBook:
                         Console.WriteLine($"\n{RETURN_BOOK_ACTION_TEXT}");
                         libraryManagementSystem.ReturnBook();
                         break;
+
                     case (int)Actions.BorrowBook:
                         Console.WriteLine($"\n{BORROW_BOOK_ACTION_TEXT}");
                         libraryManagementSystem.BorrowBook();
                         break;
+
                     case (int)Actions.GetTotalPhysicalBooks:
                         Console.WriteLine($"Total physical books: {libraryManagementSystem.PhysicalBooks.Count}");
                         break;
+
                     case (int)Actions.GetTotalEBooks:
                         Console.WriteLine($"Total e-books: {libraryManagementSystem.EBooks.Count}");
                         break;
+
                     case (int)Actions.GetTotalBorrowedPhysicalBooks:
                         Console.WriteLine($"Total borrowed physicalBooks: {libraryManagementSystem.TotalBorrowedPhysicalBooks}");
                         break;
+
                     case (int)Actions.GetTotalBorrowedEBooks:
                         Console.WriteLine($"Total borrowed e-books: {libraryManagementSystem.TotalBorrowedEBooks}");
                         break;
+
                     case (int)Actions.GetAllBookTitles:
                         libraryManagementSystem.ConsoleAllBookTitles();
                         break;
+
                     case (int)Actions.GetTotalBooksCount:
                         Console.WriteLine($"System's total books count: {libraryManagementSystem.TotalBooksCount}");
                         break;
+
                     case (int)Actions.RegisterMember:
                         Console.WriteLine($"\n{REGISTER_MEMBER_TEXT}");
                         libraryManagementSystem.RegisterMember();
                         break;
+
                     case (int)Actions.GetTotalMembersCount:
                         Console.WriteLine($"Total members count: {libraryManagementSystem.TotalMembersCount}");
                         break;
+
                     case (int)Actions.GetTotalTeacherMembersCount:
                         Console.WriteLine($"Total members count: {libraryManagementSystem.TotalTeacherMembersCount}");
                         break;
+
                     case (int)Actions.GetTotalStudentMembersCount:
                         Console.WriteLine($"Total members count: {libraryManagementSystem.TotalStudentMembersCount}");
                         break;
+
                     default:
                         Console.WriteLine("[ERROR]: Something went wrong while choosing menu");
                         break;
                 }
                 Console.WriteLine();
-
             }
-
         }
     }
 }

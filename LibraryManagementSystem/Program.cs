@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using LibraryManagementSystem.Models.Books;
-using LibraryManagementSystem.Services;
+﻿using LibraryManagementSystem.Services;
+using System;
 
 namespace LibraryManagementSystem
 {
     internal class Program
     {
-
-        static void Main()
+        private static void Main()
         {
             MenuService.Start();
 

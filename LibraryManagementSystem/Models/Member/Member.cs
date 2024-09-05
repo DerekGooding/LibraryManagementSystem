@@ -1,8 +1,8 @@
-﻿using System;
+﻿using LibraryManagementSystem.Models.Books;
+using LibraryManagementSystem.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using LibraryManagementSystem.Utils;
-using LibraryManagementSystem.Models.Books;
 
 namespace LibraryManagementSystem.Models.Member
 {
@@ -15,29 +15,32 @@ namespace LibraryManagementSystem.Models.Member
             Teacher
         }
 
-        const int MEMBER_ID_LENGTH = 8;
+        private const int MEMBER_ID_LENGTH = 8;
 
-        readonly string _memberId = CustomUtils.GenerateUniqueID(0, MEMBER_ID_LENGTH);
-        string _firstName = string.Empty;
-        string _lastName = string.Empty;
-        string _email = string.Empty; // unique prop
-        MemberType _type;
+        private readonly string _memberId = CustomUtils.GenerateUniqueID(0, MEMBER_ID_LENGTH);
+        private string _firstName = string.Empty;
+        private string _lastName = string.Empty;
+        private string _email = string.Empty; // unique prop
+        private MemberType _type;
 
         protected HashSet<string> BorrowedBookIds { get; set; } = new HashSet<string>();
-        public readonly static List<string> MemberTypeNames = Enum.GetNames(typeof(MemberType)).ToList();
+        public static readonly List<string> MemberTypeNames = Enum.GetNames(typeof(MemberType)).ToList();
         public MemberType Type { get => _type; protected set => _type = value; }
         public string Name { get => $"{FirstName} {LastName}"; }
         public string MemberId { get => _memberId; }
+
         public string FirstName
         {
             get => _firstName;
             protected set => _firstName = !string.IsNullOrWhiteSpace(value) && !string.IsNullOrEmpty(value) ? value.Trim().ToLower() : string.Empty;
         }
+
         public string LastName
         {
             get => _lastName;
             protected set => _lastName = !string.IsNullOrWhiteSpace(value) && !string.IsNullOrEmpty(value) ? value.Trim().ToLower() : string.Empty;
         }
+
         public string Email
         {
             get => _email;
@@ -70,8 +73,6 @@ namespace LibraryManagementSystem.Models.Member
                 $"\n\temail: '{Email}'" +
                 $"\n\ttype: '{Type}'";
         }
-
-
 
         public static bool SelectMemberTypeUsingMenuSelector(out MemberType result, string message = "Use the arrow keys to navigate and press Enter to select member type:")
         {

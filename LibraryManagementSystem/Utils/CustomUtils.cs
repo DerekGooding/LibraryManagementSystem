@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
-
 
 namespace LibraryManagementSystem.Utils
 {
@@ -15,7 +13,7 @@ namespace LibraryManagementSystem.Utils
         {
             if (max < min || min > max)
                 throw new ArgumentException("IntInValidRange(): invalid arg passed because either max < min || min > max");
-            
+
             bool isInRange = false;
 
             for (int i = min; i <= max; i++)
@@ -25,11 +23,9 @@ namespace LibraryManagementSystem.Utils
                     isInRange = true;
                     break;
                 }
-
             }
 
             return isInRange;
         }
-    
     }
 }
