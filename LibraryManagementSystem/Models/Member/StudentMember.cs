@@ -1,18 +1,13 @@
 ﻿using LibraryManagementSystem.Utils;
 
-namespace LibraryManagementSystem.Models.Member
+namespace LibraryManagementSystem.Models.Member;
+
+internal class StudentMember(
+    string firstName,
+    string lastName,
+    string email) : Member(firstName: firstName, lastName: lastName, email: email, type: MemberType.Student)
 {
-    internal class StudentMember : Member
-    {
-        public string StudentId { get; } = CustomUtils.GenerateUniqueID(0, 8);
+    public string StudentId { get; } = CustomUtils.GenerateUniqueID(0, 8);
 
-        public StudentMember(
-            string firstName,
-            string lastName,
-            string email) : base(firstName: firstName, lastName: lastName, email: email, type: MemberType.Student)
-        {
-        }
-
-        public override string ToString() => base.ToString() + $"\n\tstudent id: '{StudentId}'";
-    }
+    public override string ToString() => base.ToString() + $"\n\tstudent id: '{StudentId}'";
 }

@@ -1,18 +1,17 @@
-﻿namespace LibraryManagementSystem.Models.Books
+﻿namespace LibraryManagementSystem.Models.Books;
+
+/*
+ * TODO: Add book copies
+*/
+
+internal class PhysicalBook : Book
 {
-    /*
-     * TODO: Add book copies
-    */
+    public string ShelfLocation { get; set; } = string.Empty;
 
-    internal class PhysicalBook : Book
-    {
-        public string ShelfLocation { get; set; } = string.Empty;
+    public PhysicalBook(string title, string author, string shelfLocation) : base(title, author, BookType.Physical)
+        => ShelfLocation = shelfLocation;
 
-        public PhysicalBook(string title, string author, string shelfLocation) : base(title, author, BookType.Physical)
-            => ShelfLocation = shelfLocation;
+    public int CalculatePhysicalBookWeight() => 12;
 
-        public int CalculatePhysicalBookWeight() => 12;
-
-        public override string ToString() => base.ToString() + $"\n\tShelf-location: '{ShelfLocation}'";
-    }
+    public override string ToString() => base.ToString() + $"\n\tShelf-location: '{ShelfLocation}'";
 }

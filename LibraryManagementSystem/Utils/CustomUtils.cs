@@ -1,29 +1,28 @@
 ﻿using System;
 
-namespace LibraryManagementSystem.Utils
+namespace LibraryManagementSystem.Utils;
+
+internal static class CustomUtils
 {
-    internal static class CustomUtils
+    public static string GenerateUniqueID(int startIndex = 0, int length = 32)
+        => Guid.NewGuid().ToString("N").Substring(startIndex, length);
+
+    public static bool IntInValidRange(int check, int max, int min)
     {
-        public static string GenerateUniqueID(int startIndex = 0, int length = 32)
-            => Guid.NewGuid().ToString("N").Substring(startIndex, length);
+        if (max < min || min > max)
+            throw new ArgumentException("IntInValidRange(): invalid arg passed because either max < min || min > max");
 
-        public static bool IntInValidRange(int check, int max, int min)
+        bool isInRange = false;
+
+        for (int i = min; i <= max; i++)
         {
-            if (max < min || min > max)
-                throw new ArgumentException("IntInValidRange(): invalid arg passed because either max < min || min > max");
-
-            bool isInRange = false;
-
-            for (int i = min; i <= max; i++)
+            if (i == check)
             {
-                if (i == check)
-                {
-                    isInRange = true;
-                    break;
-                }
+                isInRange = true;
+                break;
             }
-
-            return isInRange;
         }
+
+        return isInRange;
     }
 }

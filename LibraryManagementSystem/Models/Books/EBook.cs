@@ -1,24 +1,23 @@
 ﻿using LibraryManagementSystem.Utils;
 using System;
 
-namespace LibraryManagementSystem.Models.Books
+namespace LibraryManagementSystem.Models.Books;
+
+internal class EBook : Book
 {
-    internal class EBook : Book
-    {
-        private string _downloadLink = string.Empty;
-        public string DownloadLink { get => _downloadLink; protected set => _downloadLink = ValidateURL(value); }
+    private string _downloadLink = string.Empty;
+    public string DownloadLink { get => _downloadLink; protected set => _downloadLink = ValidateURL(value); }
 
-        public EBook(string title, string author, string downloadLink) : base(title, author, BookType.EBook) => DownloadLink = downloadLink;
+    public EBook(string title, string author, string downloadLink) : base(title, author, BookType.EBook) => DownloadLink = downloadLink;
 
-        public override string ToString() => base.ToString() +
-                $"\n\tdownload link: '{DownloadLink}'";
+    public override string ToString() => base.ToString() +
+            $"\n\tdownload link: '{DownloadLink}'";
 
-        private static string ValidateURL(string url)
-            => Validator.IsValidURL(url, out string result)
-                ? result.Trim()
-                : throw new ArgumentException("Invalid URL can't be set as a download link of an EBook");
+    private static string ValidateURL(string url)
+        => Validator.IsValidURL(url, out string result)
+            ? result.Trim()
+            : throw new ArgumentException("Invalid URL can't be set as a download link of an EBook");
 
-        public void Download()
-            => Console.WriteLine($"Downloaded e-book with title {Title}");
-    }
+    public void Download()
+        => Console.WriteLine($"Downloaded e-book with title {Title}");
 }

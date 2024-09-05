@@ -1,15 +1,14 @@
-﻿namespace LibraryManagementSystem.Interfaces.Infrastructure.Services
+﻿namespace LibraryManagementSystem.Interfaces.Infrastructure.Services;
+
+internal interface ILibraryService
 {
-    internal interface ILibraryService
-    {
-        void RegisterMember();
+    void RegisterMember();
 
-        void AddBook();
+    void AddBook();
 
-        void BorrowBook();
+    void BorrowBook();
 
-        void ReturnBook();
+    void ReturnBook();
 
-        void ConsoleAllBookTitles();
-    }
+    void ConsoleAllBookTitles();
 }
