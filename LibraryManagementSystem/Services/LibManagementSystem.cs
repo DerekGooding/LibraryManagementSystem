@@ -89,7 +89,7 @@ internal class LibManagementSystem : ILibraryService
         // registering members according to selected member type
         if (memberType == Member.MemberType.Student)
         {
-            StudentMember newMember = new StudentMember(firstName, lastName, email);
+            StudentMember newMember = new(firstName, lastName, email);
             bool memberRegistered = Members.Add(newMember);
             if (!memberRegistered)
             {
@@ -103,7 +103,7 @@ internal class LibManagementSystem : ILibraryService
         }
         else if (memberType == Member.MemberType.Teacher)
         {
-            TeacherMember newMember = new TeacherMember(firstName, lastName, email);
+            TeacherMember newMember = new(firstName, lastName, email);
             bool memberRegistered = Members.Add(newMember);
             if (!memberRegistered)
             {

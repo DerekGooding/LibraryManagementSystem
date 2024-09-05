@@ -92,7 +92,7 @@ internal static class MenuService
 
     public static void Start()
     {
-        LibManagementSystem libraryManagementSystem = new LibManagementSystem();
+        LibManagementSystem libraryManagementSystem = new();
 
         Console.WriteLine("============= WELCOME TO LIBRARY MANAGEMENT SYSTEM ==============\n");
         DisplayMenu();
@@ -100,9 +100,7 @@ internal static class MenuService
         bool AskActionNumberUserInput = true;
         while (AskActionNumberUserInput)
         {
-            int userInput = AskUserValidActionNumber();
-
-            switch (userInput)
+            switch (AskUserValidActionNumber())
             {
                 case (int)Actions.ClearConsole:
                     Console.Clear();
