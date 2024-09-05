@@ -26,7 +26,7 @@ internal abstract class Book
         get => _title;
         protected set
         {
-            if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentNullException($"Trying to set invalid book's title = '{value}'");
             _title = value.Trim().ToLower();
         }
@@ -37,7 +37,7 @@ internal abstract class Book
         get => _author;
         protected set
         {
-            if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentNullException($"Trying to set invalid book's author name = '{value}'");
             _author = value.Trim();
         }
@@ -80,7 +80,7 @@ internal abstract class Book
 
     public static bool IsValidBookId(string bookId)
     {
-        if (Validator.IsStringNullOrEmptyOrWhitespace(bookId)) return false;
+        if (string.IsNullOrWhiteSpace(bookId)) return false;
 
         bookId = bookId.Trim();
 

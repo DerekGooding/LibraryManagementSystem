@@ -5,7 +5,10 @@ namespace LibraryManagementSystem.Utils;
 
 internal static class MenuSelector
 {
-    public static string SelectOption(List<string> options, string message = "Use the arrow keys to navigate and press Enter to select:", bool beepSound = true)
+    public static string SelectOption(
+        List<string> options,
+        string message = "Use the arrow keys to navigate and press Enter to select:",
+        bool beepSound = true)
     {
         int currentSelection = 0;
         ConsoleKey key;

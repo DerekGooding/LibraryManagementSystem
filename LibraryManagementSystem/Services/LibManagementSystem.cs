@@ -50,7 +50,7 @@ internal class LibManagementSystem : ILibraryService
         string firstName = ReadLine().Trim().ToLower();
 
         // validation: first name input
-        if (Validator.IsStringNullOrEmptyOrWhitespace(firstName))
+        if (string.IsNullOrWhiteSpace(firstName))
         {
             WriteLine($"[Invalid Input]: member's firstName can't be empty, or only contains whitespace, entered value = '{firstName}'");
             return;
@@ -61,7 +61,7 @@ internal class LibManagementSystem : ILibraryService
         string lastName = ReadLine().Trim().ToLower();
 
         // validation: last name input
-        if (Validator.IsStringNullOrEmptyOrWhitespace(lastName))
+        if (string.IsNullOrWhiteSpace(lastName))
         {
             WriteLine($"[Invalid Input]: member's lastName can't be empty, or only contains whitespace, entered value = '{lastName}'");
             return;
@@ -99,7 +99,6 @@ internal class LibManagementSystem : ILibraryService
 
             WriteLine("[SUCCESS]: Student member successfully registered with following details: !!");
             WriteLine(newMember);
-            return;
         }
         else if (memberType == Member.MemberType.Teacher)
         {
@@ -118,7 +117,6 @@ internal class LibManagementSystem : ILibraryService
         else
         {
             WriteLine("[ERROR]: Received invalid member type while registering member in the system.");
-            return;
         }
     }
 
@@ -152,7 +150,7 @@ internal class LibManagementSystem : ILibraryService
         string bookTitle = ReadLine().Trim().ToLower();
 
         // validating book title
-        if (Validator.IsStringNullOrEmptyOrWhitespace(bookTitle))
+        if (string.IsNullOrWhiteSpace(bookTitle))
         {
             WriteLine($"[Invalid Input]: book title can't be empty, or only contains whitespace, entered value = '{bookTitle}'");
             return;
@@ -163,7 +161,7 @@ internal class LibManagementSystem : ILibraryService
         string BookAuthor = ReadLine().Trim().ToLower();
 
         // validating book author
-        if (Validator.IsStringNullOrEmptyOrWhitespace(BookAuthor))
+        if (string.IsNullOrWhiteSpace(BookAuthor))
         {
             WriteLine($"[Invalid Input]: book author can't be empty, or only contains whitespace, entered value = '{BookAuthor}'");
             return;
@@ -186,7 +184,7 @@ internal class LibManagementSystem : ILibraryService
             string bookShelfLocation = ReadLine().Trim();
 
             // validating book shelfLocation
-            if (Validator.IsStringNullOrEmptyOrWhitespace(bookShelfLocation))
+            if (string.IsNullOrWhiteSpace(bookShelfLocation))
             {
                 WriteLine($"[Invalid Input]: book shelfLocation can't be empty, or only contains whitespace, entered value = '{bookShelfLocation}'");
                 return;
@@ -213,7 +211,7 @@ internal class LibManagementSystem : ILibraryService
             string downloadLinkInput = ReadLine().Trim();
 
             // validating book  download link, can't be empty or contains whitespace only
-            if (Validator.IsStringNullOrEmptyOrWhitespace(downloadLinkInput))
+            if (string.IsNullOrWhiteSpace(downloadLinkInput))
             {
                 WriteLine($"[Invalid Input]: book download link can't be empty, or only contains whitespace, entered value = '{downloadLinkInput}'");
                 return;
@@ -292,7 +290,7 @@ internal class LibManagementSystem : ILibraryService
         string bookTitle = ReadLine().Trim().ToLower();
 
         // validating book title
-        if (Validator.IsStringNullOrEmptyOrWhitespace(bookTitle))
+        if (string.IsNullOrWhiteSpace(bookTitle))
         {
             WriteLine($"[Invalid Input]: book title can't be empty, or only contains whitespace, entered value = '{bookTitle}'");
             return;
@@ -303,7 +301,7 @@ internal class LibManagementSystem : ILibraryService
         string bookAuthor = ReadLine().Trim().ToLower();
 
         // validating book author
-        if (Validator.IsStringNullOrEmptyOrWhitespace(bookAuthor))
+        if (string.IsNullOrWhiteSpace(bookAuthor))
         {
             WriteLine($"[Invalid Input]: book author can't be empty, or only contains whitespace, entered value = '{bookAuthor}'");
             return;
@@ -397,7 +395,7 @@ internal class LibManagementSystem : ILibraryService
         string bookTitle = ReadLine().Trim().ToLower();
 
         // validating book title
-        if (Validator.IsStringNullOrEmptyOrWhitespace(bookTitle))
+        if (string.IsNullOrWhiteSpace(bookTitle))
         {
             WriteLine($"[Invalid Input]: book title can't be empty, or only contains whitespace, entered value = '{bookTitle}'");
             return;
@@ -408,7 +406,7 @@ internal class LibManagementSystem : ILibraryService
         string bookAuthor = ReadLine().Trim().ToLower();
 
         // validating book author
-        if (Validator.IsStringNullOrEmptyOrWhitespace(bookAuthor))
+        if (string.IsNullOrWhiteSpace(bookAuthor))
         {
             WriteLine($"[Invalid Input]: book author can't be empty, or only contains whitespace, entered value = '{bookAuthor}'");
             return;

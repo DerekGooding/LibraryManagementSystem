@@ -28,7 +28,7 @@ internal abstract class Member
     public string FirstName
     {
         get => _firstName;
-        protected set => _firstName = !string.IsNullOrWhiteSpace(value) && !string.IsNullOrEmpty(value)
+        protected set => _firstName = !string.IsNullOrWhiteSpace(value)
             ? value.Trim().ToLower()
             : string.Empty;
     }
@@ -36,7 +36,7 @@ internal abstract class Member
     public string LastName
     {
         get => _lastName;
-        protected set => _lastName = !string.IsNullOrWhiteSpace(value) && !string.IsNullOrEmpty(value)
+        protected set => _lastName = !string.IsNullOrWhiteSpace(value)
             ? value.Trim().ToLower()
             : string.Empty;
     }
@@ -111,7 +111,7 @@ internal abstract class Member
     {
         validationError = false;
 
-        if (Validator.IsStringNullOrEmptyOrWhitespace(bookId))
+        if (string.IsNullOrWhiteSpace(bookId))
         {
             validationError = true;
             return false;
