@@ -19,5 +19,5 @@ internal class EBook : Book
             : throw new ArgumentException("Invalid URL can't be set as a download link of an EBook");
 
     public void Download()
-        => Console.WriteLine($"Downloaded e-book with title {Title}");
+        => WriteLine($"Downloaded e-book with title {Title}");
 }

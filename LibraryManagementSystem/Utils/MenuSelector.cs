@@ -10,10 +10,10 @@ internal static class MenuSelector
         int currentSelection = 0;
         ConsoleKey key;
 
-        Console.WriteLine(message);
+        WriteLine(message);
 
         // Store the initial cursor position
-        int cursorTop = Console.CursorTop;
+        int cursorTop = CursorTop;
 
         do
         {
@@ -21,24 +21,24 @@ internal static class MenuSelector
             for (int i = 0; i < options.Count; i++)
             {
                 // Move the cursor to the correct position
-                Console.SetCursorPosition(0, cursorTop + i);
+                SetCursorPosition(0, cursorTop + i);
 
                 if (i == currentSelection)
                 {
                     // Highlight the currently selected option
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"> {options[i]}");
-                    Console.ResetColor();
+                    ForegroundColor = ConsoleColor.Green;
+                    WriteLine($"> {options[i]}");
+                    ResetColor();
                 }
                 else
                 {
-                    Console.WriteLine($"  {options[i]}");
+                    WriteLine($"  {options[i]}");
                 }
             }
 
             // Capture the key press
-            key = Console.ReadKey(true).Key;
-            if (beepSound) Console.Beep();
+            key = ReadKey(true).Key;
+            if (beepSound) Beep();
 
             // Update the current selection based on the key press
             if (key == ConsoleKey.UpArrow)

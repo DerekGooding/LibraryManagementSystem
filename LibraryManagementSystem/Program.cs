@@ -9,6 +9,6 @@ internal static class Program
     {
         MenuService.Start();
 
-        Console.ReadLine();
+        ReadLine();
     }
 }

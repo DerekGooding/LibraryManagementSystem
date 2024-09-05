@@ -34,24 +34,24 @@ internal static class MenuService
     private static void DisplayMenu()
     {
         // update Actions enum upon updating Menu
-        Console.WriteLine("[MENU]:");
-        Console.WriteLine("Enter -2 to clear console");
-        Console.WriteLine("Enter -1 to exit");
-        Console.WriteLine("Enter 0 to see menu");
-        Console.WriteLine("Enter 1 to add book");
-        Console.WriteLine("Enter 2 to borrow book");
-        Console.WriteLine("Enter 3 to return book");
-        Console.WriteLine("Enter 4 to get total physical books");
-        Console.WriteLine("Enter 5 to get total e-books");
-        Console.WriteLine("Enter 6 to get total borrowed physical books");
-        Console.WriteLine("Enter 7 to get total borrowed e-books");
-        Console.WriteLine("Enter 8 to get all book titles");
-        Console.WriteLine("Enter 9 to get system's total books count");
-        Console.WriteLine("Enter 10 to register a member");
-        Console.WriteLine("Enter 11 to get total members count");
-        Console.WriteLine("Enter 12 to get total teacher members count");
-        Console.WriteLine("Enter 13 to get total student members count");
-        Console.Write("\n");
+        WriteLine("[MENU]:");
+        WriteLine("Enter -2 to clear console");
+        WriteLine("Enter -1 to exit");
+        WriteLine("Enter 0 to see menu");
+        WriteLine("Enter 1 to add book");
+        WriteLine("Enter 2 to borrow book");
+        WriteLine("Enter 3 to return book");
+        WriteLine("Enter 4 to get total physical books");
+        WriteLine("Enter 5 to get total e-books");
+        WriteLine("Enter 6 to get total borrowed physical books");
+        WriteLine("Enter 7 to get total borrowed e-books");
+        WriteLine("Enter 8 to get all book titles");
+        WriteLine("Enter 9 to get system's total books count");
+        WriteLine("Enter 10 to register a member");
+        WriteLine("Enter 11 to get total members count");
+        WriteLine("Enter 12 to get total teacher members count");
+        WriteLine("Enter 13 to get total student members count");
+        Write("\n");
     }
 
     private static int AskUserValidActionNumber()
@@ -61,13 +61,13 @@ internal static class MenuService
 
         while (askUserInput)
         {
-            Console.Write("Enter an action number: ");
-            bool isValidUserInput = int.TryParse(Console.ReadLine(), out int userInputInt);
+            Write("Enter an action number: ");
+            bool isValidUserInput = int.TryParse(ReadLine(), out int userInputInt);
 
             // checking if user input is a valid integer
             if (!isValidUserInput)
             {
-                Console.WriteLine("[ALERT]: Enter valid action number from Menu\n");
+                WriteLine("[ALERT]: Enter valid action number from Menu\n");
                 continue;
             }
 
@@ -79,7 +79,7 @@ internal static class MenuService
             bool userInputInValidRange = CustomUtils.IntInValidRange(check: userInputInt, max: (int)Actions.GetTotalStudentMembersCount, min: (int)Actions.ClearConsole);
             if (!userInputInValidRange)
             {
-                Console.WriteLine("[ALERT]: Enter valid action number from Menu\n");
+                WriteLine("[ALERT]: Enter valid action number from Menu\n");
                 continue;
             }
 
@@ -94,7 +94,7 @@ internal static class MenuService
     {
         LibManagementSystem libraryManagementSystem = new();
 
-        Console.WriteLine("============= WELCOME TO LIBRARY MANAGEMENT SYSTEM ==============\n");
+        WriteLine("============= WELCOME TO LIBRARY MANAGEMENT SYSTEM ==============\n");
         DisplayMenu();
 
         bool AskActionNumberUserInput = true;
@@ -103,7 +103,7 @@ internal static class MenuService
             switch (AskUserValidActionNumber())
             {
                 case (int)Actions.ClearConsole:
-                    Console.Clear();
+                    Clear();
                     DisplayMenu();
                     break;
 
@@ -113,38 +113,38 @@ internal static class MenuService
                     break;
 
                 case (int)Actions.DisplayMenu:
-                    Console.WriteLine();
+                    WriteLine();
                     DisplayMenu();
                     continue;
                 case (int)Actions.AddBook:
-                    Console.WriteLine($"\n{ADD_BOOK_ACTION_TEXT}");
+                    WriteLine($"\n{ADD_BOOK_ACTION_TEXT}");
                     libraryManagementSystem.AddBook();
                     break;
 
                 case (int)Actions.ReturnBook:
-                    Console.WriteLine($"\n{RETURN_BOOK_ACTION_TEXT}");
+                    WriteLine($"\n{RETURN_BOOK_ACTION_TEXT}");
                     libraryManagementSystem.ReturnBook();
                     break;
 
                 case (int)Actions.BorrowBook:
-                    Console.WriteLine($"\n{BORROW_BOOK_ACTION_TEXT}");
+                    WriteLine($"\n{BORROW_BOOK_ACTION_TEXT}");
                     libraryManagementSystem.BorrowBook();
                     break;
 
                 case (int)Actions.GetTotalPhysicalBooks:
-                    Console.WriteLine($"Total physical books: {libraryManagementSystem.PhysicalBooks.Count}");
+                    WriteLine($"Total physical books: {libraryManagementSystem.PhysicalBooks.Count}");
                     break;
 
                 case (int)Actions.GetTotalEBooks:
-                    Console.WriteLine($"Total e-books: {libraryManagementSystem.EBooks.Count}");
+                    WriteLine($"Total e-books: {libraryManagementSystem.EBooks.Count}");
                     break;
 
                 case (int)Actions.GetTotalBorrowedPhysicalBooks:
-                    Console.WriteLine($"Total borrowed physicalBooks: {libraryManagementSystem.TotalBorrowedPhysicalBooks}");
+                    WriteLine($"Total borrowed physicalBooks: {libraryManagementSystem.TotalBorrowedPhysicalBooks}");
                     break;
 
                 case (int)Actions.GetTotalBorrowedEBooks:
-                    Console.WriteLine($"Total borrowed e-books: {libraryManagementSystem.TotalBorrowedEBooks}");
+                    WriteLine($"Total borrowed e-books: {libraryManagementSystem.TotalBorrowedEBooks}");
                     break;
 
                 case (int)Actions.GetAllBookTitles:
@@ -152,31 +152,31 @@ internal static class MenuService
                     break;
 
                 case (int)Actions.GetTotalBooksCount:
-                    Console.WriteLine($"System's total books count: {libraryManagementSystem.TotalBooksCount}");
+                    WriteLine($"System's total books count: {libraryManagementSystem.TotalBooksCount}");
                     break;
 
                 case (int)Actions.RegisterMember:
-                    Console.WriteLine($"\n{REGISTER_MEMBER_TEXT}");
+                    WriteLine($"\n{REGISTER_MEMBER_TEXT}");
                     libraryManagementSystem.RegisterMember();
                     break;
 
                 case (int)Actions.GetTotalMembersCount:
-                    Console.WriteLine($"Total members count: {libraryManagementSystem.TotalMembersCount}");
+                    WriteLine($"Total members count: {libraryManagementSystem.TotalMembersCount}");
                     break;
 
                 case (int)Actions.GetTotalTeacherMembersCount:
-                    Console.WriteLine($"Total members count: {libraryManagementSystem.TotalTeacherMembersCount}");
+                    WriteLine($"Total members count: {libraryManagementSystem.TotalTeacherMembersCount}");
                     break;
 
                 case (int)Actions.GetTotalStudentMembersCount:
-                    Console.WriteLine($"Total members count: {libraryManagementSystem.TotalStudentMembersCount}");
+                    WriteLine($"Total members count: {libraryManagementSystem.TotalStudentMembersCount}");
                     break;
 
                 default:
-                    Console.WriteLine("[ERROR]: Something went wrong while choosing menu");
+                    WriteLine("[ERROR]: Something went wrong while choosing menu");
                     break;
             }
-            Console.WriteLine();
+            WriteLine();
         }
     }
 }
