@@ -11,33 +11,18 @@ internal class LibManagementSystem : ILibraryService
     private HashSet<Member> Members { get; } = [];
     private HashSet<Book> Books { get; } = [];
 
-    // derived class props
-    public ReadOnlyCollection<StudentMember> StudentMembers => Members.OfType<StudentMember>().ToList().AsReadOnly();
-
-    public ReadOnlyCollection<TeacherMember> TeacherMembers => Members.OfType<TeacherMember>().ToList().AsReadOnly();
-    public ReadOnlyCollection<PhysicalBook> PhysicalBooks => Books.OfType<PhysicalBook>().ToList().AsReadOnly();
-    public ReadOnlyCollection<EBook> EBooks => Books.OfType<EBook>().ToList().AsReadOnly();
-    public long TotalStudentMembersCount => StudentMembers.Count;
-    public long TotalTeacherMembersCount => TeacherMembers.Count;
+    public ReadOnlyCollection<PhysicalBook> PhysicalBooks => new([.. Books.OfType<PhysicalBook>()]);
+    public ReadOnlyCollection<EBook> EBooks => new([.. Books.OfType<EBook>()]);
+    public long TotalStudentMembersCount => Members.Count(x=> x is StudentMember);
+    public long TotalTeacherMembersCount => Members.Count(x => x is TeacherMember);
     public long TotalMembersCount => TotalStudentMembersCount + TotalTeacherMembersCount;
-    public long TotalBorrowedPhysicalBooks => Books.OfType<PhysicalBook>().ToList().FindAll(book => book.IsBorrowed).Count;
-    public long TotalBorrowedEBooks => Books.OfType<EBook>().ToList().FindAll(book => book.IsBorrowed).Count;
-    public ReadOnlyCollection<string> PhysicalBookTitlesList => Books.OfType<PhysicalBook>().ToList().ConvertAll(book => book.Title).AsReadOnly();
-    public ReadOnlyCollection<string> EBookTitlesList => Books.OfType<EBook>().ToList().ConvertAll(book => book.Title).AsReadOnly();
+    public long TotalBorrowedPhysicalBooks => Books.Count(x=> x is PhysicalBook && x.IsBorrowed);
+    public long TotalBorrowedEBooks => Books.Count(x => x is EBook && x.IsBorrowed);
 
-    public ReadOnlyCollection<string> AllBookTitlesList
-    {
-        get
-        {
-            List<string> _allBookTitlesList = [.. PhysicalBookTitlesList, .. EBookTitlesList];
-            return new ReadOnlyCollection<string>(_allBookTitlesList);
-        }
-    }
-
-    public long TotalBooksCount => PhysicalBooks.Count + EBooks.Count;
+    public ReadOnlyCollection<string> BookTitles => new([.. Books.Select(x => x.Title)]);
+    public long TotalBooksCount => Books.Count;
 
     //methods
-    // done
     public void RegisterMember()
     {
         // TODO: Validate member input details
@@ -139,7 +124,6 @@ internal class LibManagementSystem : ILibraryService
         return operationSuccess;
     }
 
-    // done
     public void AddBook()
     {
         // book title input
@@ -453,17 +437,16 @@ internal class LibManagementSystem : ILibraryService
         WriteLine($"Book with given details and borrowed by '{member.Name}' has been successfully returned!");
     }
 
-    // done
     public void ConsoleAllBookTitles()
     {
-        if (AllBookTitlesList.Count == 0)
+        if (BookTitles.Count == 0)
         {
             WriteLine("[ALERT]: No book titles found!!");
             return;
         }
 
         WriteLine("Book titles:");
-        foreach (string title in AllBookTitlesList)
+        foreach (string title in BookTitles)
             Write($"'{title}',\n");
     }
 }
