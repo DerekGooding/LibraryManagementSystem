@@ -1,14 +1,11 @@
-﻿using LibraryManagementSystem.Models.Menus;
+﻿using LibraryManagementSystem.Models.Books;
+using LibraryManagementSystem.Models.Menus;
+using System;
 
 namespace LibraryManagementSystem.Services;
 
 internal static class MenuService
 {
-    private const string ADD_BOOK_ACTION_TEXT = "[ACTION]: Add Book";
-    private const string BORROW_BOOK_ACTION_TEXT = "[ACTION]: Borrow book";
-    private const string RETURN_BOOK_ACTION_TEXT = "[ACTION]: Return book";
-    private const string REGISTER_MEMBER_TEXT = "[ACTION]: Register Member";
-
     public static void Start()
     {
         WriteLine("============= WELCOME TO LIBRARY MANAGEMENT SYSTEM ==============\n");
@@ -30,17 +27,17 @@ internal static class MenuService
         menu.Add(new("X", "Exit", () => Environment.Exit(0)));
         menu.Add(new("1", "Add Book", () =>
         {
-            WriteLine($"\n{ADD_BOOK_ACTION_TEXT}");
+            WriteLine("\n[ACTION]: Add Book");
             library.AddBook();
         }));
         menu.Add(new("2", "Borrow Book", () =>
         {
-            WriteLine($"\n{BORROW_BOOK_ACTION_TEXT}");
+            WriteLine("\n[ACTION]: Borrow book");
             library.BorrowBook();
         }));
         menu.Add(new("3", "Return Book", () =>
         {
-            WriteLine($"\n{RETURN_BOOK_ACTION_TEXT}");
+            WriteLine("\n[ACTION]: Return book");
             library.ReturnBook();
         }));
         menu.Add(new("4", "Total Physical Books", () => Info($"Total physical books: {library.PhysicalBooks.Count}")));
@@ -51,7 +48,7 @@ internal static class MenuService
         menu.Add(new("9", "System's Total Books Count", () => Info($"System's total books count: {library.TotalBooksCount}")));
         menu.Add(new("10", "Register New Member", () =>
         {
-            WriteLine($"\n{REGISTER_MEMBER_TEXT}");
+            WriteLine("\n[ACTION]: Register Member");
             library.RegisterMember();
         }));
         menu.Add(new("11", "Total Members Count", () => Info($"Total members count: {library.TotalMembersCount}")));
