@@ -11,16 +11,16 @@ internal class LibManagementSystem : ILibraryService
     private HashSet<Member> Members { get; } = [];
     private HashSet<Book> Books { get; } = [];
 
-    public ReadOnlyCollection<PhysicalBook> PhysicalBooks => new([.. Books.OfType<PhysicalBook>()]);
-    public ReadOnlyCollection<EBook> EBooks => new([.. Books.OfType<EBook>()]);
-    public long TotalStudentMembersCount => Members.Count(x=> x is StudentMember);
-    public long TotalTeacherMembersCount => Members.Count(x => x is TeacherMember);
-    public long TotalMembersCount => TotalStudentMembersCount + TotalTeacherMembersCount;
-    public long TotalBorrowedPhysicalBooks => Books.Count(x=> x is PhysicalBook && x.IsBorrowed);
-    public long TotalBorrowedEBooks => Books.Count(x => x is EBook && x.IsBorrowed);
+    public long PhysicalBookCount => Books.Count(x => x is PhysicalBook);
+    public long EBookCount => Books.Count(x => x is EBook);
+    public long StudentCount => Members.Count(x=> x is StudentMember);
+    public long TeacherCount => Members.Count(x => x is TeacherMember);
+    public long MembersCount => Members.Count;
+    public long BorrowedPhysicalBooks => Books.Count(x => x.IsBorrowed && x is PhysicalBook);
+    public long BorrowedEBooks => Books.Count(x => x.IsBorrowed && x is EBook);
 
     public ReadOnlyCollection<string> BookTitles => new([.. Books.Select(x => x.Title)]);
-    public long TotalBooksCount => Books.Count;
+    public long BooksCount => Books.Count;
 
     //methods
     public void RegisterMember()

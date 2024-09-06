@@ -38,20 +38,20 @@ internal static class MenuService
             WriteLine("\n[ACTION]: Return book");
             library.ReturnBook();
         }));
-        menu.Add(new("4", "Total Physical Books", () => Info($"Total physical books: {library.PhysicalBooks.Count}")));
-        menu.Add(new("5", "Total E-Books", () => Info($"Total e-books: {library.EBooks.Count}")));
-        menu.Add(new("6", "Total Borrowed Physical Books", () => Info($"Total borrowed physicalBooks: {library.TotalBorrowedPhysicalBooks}")));
-        menu.Add(new("7", "Total Borrowed E-Books", () => Info($"Total borrowed e-books: {library.TotalBorrowedEBooks}")));
+        menu.Add(new("4", "Total Physical Books", () => Info($"Total physical books: {library.PhysicalBookCount}")));
+        menu.Add(new("5", "Total E-Books", () => Info($"Total e-books: {library.EBookCount}")));
+        menu.Add(new("6", "Total Borrowed Physical Books", () => Info($"Total borrowed physicalBooks: {library.BorrowedPhysicalBooks}")));
+        menu.Add(new("7", "Total Borrowed E-Books", () => Info($"Total borrowed e-books: {library.BorrowedEBooks}")));
         menu.Add(new("8", "All Book Titles", library.ConsoleAllBookTitles));
-        menu.Add(new("9", "System's Total Books Count", () => Info($"System's total books count: {library.TotalBooksCount}")));
+        menu.Add(new("9", "System's Total Books Count", () => Info($"System's total books count: {library.BooksCount}")));
         menu.Add(new("10", "Register New Member", () =>
         {
             WriteLine("\n[ACTION]: Register Member");
             library.RegisterMember();
         }));
-        menu.Add(new("11", "Total Members Count", () => Info($"Total members count: {library.TotalMembersCount}")));
-        menu.Add(new("12", "Total Teacher Members Count", () => Info($"Total members count: {library.TotalTeacherMembersCount}")));
-        menu.Add(new("13", "Total Student Members Count", () => Info($"Total members count: {library.TotalStudentMembersCount}")));
+        menu.Add(new("11", "Total Members Count", () => Info($"Total members count: {library.MembersCount}")));
+        menu.Add(new("12", "Total Teacher Members Count", () => Info($"Total members count: {library.TeacherCount}")));
+        menu.Add(new("13", "Total Student Members Count", () => Info($"Total members count: {library.StudentCount}")));
 
         return menu;
     }
