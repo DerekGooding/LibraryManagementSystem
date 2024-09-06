@@ -62,20 +62,20 @@ internal abstract class Book
         return hashTitle ^ hashAuthor ^ (hashType * 17);
     }
 
-    public static bool IsValidId(string bookId)
+    public static bool IsValidId(string id)
     {
-        if (string.IsNullOrWhiteSpace(bookId)) return false;
+        if (string.IsNullOrWhiteSpace(id)) return false;
 
-        bookId = bookId.Trim();
+        id = id.Trim();
 
-        return bookId.Length == BOOK_ID_LENGTH;
+        return id.Length == BOOK_ID_LENGTH;
     }
 
     public static BookType? SelectType(string message = "Use the arrow keys to navigate and press Enter to select book type:")
     {
-        string selectedBookTypeInput = MenuSelector.SelectOption(BookTypeNames, message);
-        bool isValidSelectedBookType = Enum.TryParse(selectedBookTypeInput, false, out BookType validBookType);
-        return isValidSelectedBookType ? null : validBookType;
+        string input = MenuSelector.SelectOption(BookTypeNames, message);
+        bool isValid = Enum.TryParse(input, false, out BookType bookType);
+        return isValid ? bookType : null;
     }
 
     public void Borrow() => IsBorrowed = true;

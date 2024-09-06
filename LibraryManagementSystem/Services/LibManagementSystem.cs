@@ -13,7 +13,7 @@ internal class LibManagementSystem : ILibraryService
 
     public long PhysicalBookCount => Books.Count(x => x is PhysicalBook);
     public long EBookCount => Books.Count(x => x is EBook);
-    public long StudentCount => Members.Count(x=> x is StudentMember);
+    public long StudentCount => Members.Count(x => x is StudentMember);
     public long TeacherCount => Members.Count(x => x is TeacherMember);
     public long MembersCount => Members.Count;
     public long BorrowedPhysicalBooks => Books.Count(x => x.IsBorrowed && x is PhysicalBook);
@@ -50,6 +50,7 @@ internal class LibManagementSystem : ILibraryService
 
         ReadKey();
     }
+
     private void HandleAddStudent(string firstName, string lastName, string email)
     {
         StudentMember newMember = new(firstName, lastName, email);
@@ -63,6 +64,7 @@ internal class LibManagementSystem : ILibraryService
             WriteLine(newMember);
         }
     }
+
     private void HandleAddTeacher(string firstName, string lastName, string email)
     {
         TeacherMember newMember = new(firstName, lastName, email);
@@ -93,22 +95,25 @@ internal class LibManagementSystem : ILibraryService
     public void AddBook()
     {
         string title = Ask("Enter book title: ");
-        string author =  Ask("Enter book author: ");
+        string author = Ask("Enter book author: ");
 
         switch (Book.SelectType())
         {
             case Book.BookType.Physical:
                 HandleAddPhysical(title, author);
                 break;
+
             case Book.BookType.EBook:
                 HandleAddEBook(title, author);
                 break;
+
             default:
                 WriteLine("[ERROR]: Error during book type selection.");
                 break;
         }
         ReadKey();
     }
+
     private void HandleAddPhysical(string title, string author)
     {
         string bookShelfLocation = Ask("Enter book shelfLocation: ");
@@ -119,6 +124,7 @@ internal class LibManagementSystem : ILibraryService
                 : "[ALERT]: Physical book with the following details already exists in the system!!");
         WriteLine(newBook);
     }
+
     private void HandleAddEBook(string title, string author)
     {
         string link = Ask("Enter book download link: ", isUrl: true);
@@ -246,16 +252,16 @@ internal class LibManagementSystem : ILibraryService
             return Ask(request);
         }
 
-        if(isEmail && !Validator.IsEmail(ref response))
+        if (isEmail && !Validator.IsEmail(ref response))
         {
             WriteLine($"[INVAID INPUT]: Received invalid email, entered value = '{response}'");
-            return Ask(request);
+            return Ask(request, isEmail: isEmail);
         }
 
         if (isUrl && !Validator.IsURL(ref response))
         {
             WriteLine($"[Invalid Input]: book download link URL is invalid, entered value = '{response}'");
-            return Ask(request);
+            return Ask(request, isUrl: isUrl);
         }
 
         return response;

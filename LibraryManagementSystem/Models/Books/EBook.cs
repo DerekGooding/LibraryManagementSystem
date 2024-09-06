@@ -9,14 +9,10 @@ internal class EBook : Book
 
     public EBook(string title, string author, string downloadLink) : base(title, author, BookType.EBook) => DownloadLink = downloadLink;
 
-    public override string ToString() => base.ToString() +
-            $"\n\tdownload link: '{DownloadLink}'";
+    public override string ToString() => base.ToString() + $"\n\tdownload link: '{DownloadLink}'";
 
     private static string ValidateURL(string url)
-        => Validator.IsURL(url, out string result)
-            ? result.Trim()
-            : throw new ArgumentException("Invalid URL can't be set as a download link of an EBook");
+        => Validator.IsURL(ref url) ? url : throw new ArgumentException("Invalid URL can't be set as a download link of an EBook");
 
-    public void Download()
-        => WriteLine($"Downloaded e-book with title {Title}");
+    public void Download() => WriteLine($"Downloaded e-book with title {Title}");
 }

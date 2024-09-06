@@ -8,14 +8,14 @@ internal static class MenuSelector
         bool beepSound = true)
     {
         int currentSelection = 0;
-        ConsoleKey key;
+        ConsoleKey key = ConsoleKey.None;
 
         WriteLine(message);
 
         // Store the initial cursor position
         int cursorTop = CursorTop;
 
-        do
+        while (key != ConsoleKey.Enter)
         {
             // Display the options
             for (int i = 0; i < options.Count; i++)
@@ -53,7 +53,7 @@ internal static class MenuSelector
                 if (currentSelection >= options.Count)
                     currentSelection = 0;
             }
-        } while (key != ConsoleKey.Enter);
+        }
 
         // Return the selected option
         return options[currentSelection];
