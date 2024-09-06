@@ -22,87 +22,64 @@ internal class LibManagementSystem : ILibraryService
     public ReadOnlyCollection<string> BookTitles => new([.. Books.Select(x => x.Title)]);
     public long BooksCount => Books.Count;
 
-    //methods
     public void RegisterMember()
     {
         // TODO: Validate member input details
 
-        // member first name input
-        Write("Enter first name: ");
-        string firstName = ReadLine().Trim().ToLower();
+        string firstName = Ask("Enter first name: ");
+        string lastName = Ask("Enter last name: ");
+        string email = Ask("Enter email: ", isEmail: true);
 
-        // validation: first name input
-        if (string.IsNullOrWhiteSpace(firstName))
-        {
-            WriteLine($"[Invalid Input]: member's firstName can't be empty, or only contains whitespace, entered value = '{firstName}'");
-            return;
-        }
-
-        // member last name input
-        Write("Enter last name: ");
-        string lastName = ReadLine().Trim().ToLower();
-
-        // validation: last name input
-        if (string.IsNullOrWhiteSpace(lastName))
-        {
-            WriteLine($"[Invalid Input]: member's lastName can't be empty, or only contains whitespace, entered value = '{lastName}'");
-            return;
-        }
-
-        // member email input
-        Write("Enter email: ");
-        string email = ReadLine().Trim();
-
-        // validation: email input
-        if (!Validator.IsEmail(email))
-        {
-            WriteLine($"[INVAID INPUT]: Received invalid email, entered value = '{email}'");
-            return;
-        }
-
-        // taking valid member type input and validating it
-        bool memberTypeSelection = Member.SelectMemberTypeUsingMenuSelector(out Member.MemberType memberType);
-        if (!memberTypeSelection)
+        if (!Member.SelectType(out Member.MemberType memberType))
         {
             WriteLine("[ERROR]: Error while selecting member type");
+            ReadKey();
             return;
         }
 
         // registering members according to selected member type
         if (memberType == Member.MemberType.Student)
         {
-            StudentMember newMember = new(firstName, lastName, email);
-            bool memberRegistered = Members.Add(newMember);
-            if (!memberRegistered)
-            {
-                WriteLine($"[ALERT]: member with email = '{email.Trim().ToLower()}' has already been registered in the system!!");
-                return;
-            }
-
-            WriteLine("[SUCCESS]: Student member successfully registered with following details: !!");
-            WriteLine(newMember);
+            HandleAddStudent(firstName, lastName, email);
         }
         else if (memberType == Member.MemberType.Teacher)
         {
-            TeacherMember newMember = new(firstName, lastName, email);
-            bool memberRegistered = Members.Add(newMember);
-            if (!memberRegistered)
-            {
-                WriteLine($"[ALERT]: member with email = '{email.Trim().ToLower()}' has already been registered in the system!!");
-                return;
-            }
-
-            WriteLine("[SUCCESS]: Teacher member successfully registered with following details: !!");
-            WriteLine(newMember);
-            return;
+            HandleAddTeacher(firstName, lastName, email);
         }
         else
         {
             WriteLine("[ERROR]: Received invalid member type while registering member in the system.");
         }
+
+        ReadKey();
+    }
+    private void HandleAddStudent(string firstName, string lastName, string email)
+    {
+        StudentMember newMember = new(firstName, lastName, email);
+        if (!Members.Add(newMember))
+        {
+            WriteLine($"[ALERT]: member with email = '{email.Trim().ToLower()}' has already been registered in the system!!");
+        }
+        else
+        {
+            WriteLine("[SUCCESS]: Student member successfully registered with following details: !!");
+            WriteLine(newMember);
+        }
+    }
+    private void HandleAddTeacher(string firstName, string lastName, string email)
+    {
+        TeacherMember newMember = new(firstName, lastName, email);
+        if (!Members.Add(newMember))
+        {
+            WriteLine($"[ALERT]: member with email = '{email.Trim().ToLower()}' has already been registered in the system!!");
+        }
+        else
+        {
+            WriteLine("[SUCCESS]: Teacher member successfully registered with following details: !!");
+            WriteLine(newMember);
+        }
     }
 
-    // bool to check if some kind of error while finding member or if member exists or not
     private bool FindMemberByEmail(string email, out Member result)
     {
         bool operationSuccess = false;

@@ -70,7 +70,7 @@ internal abstract class Member
             $"\n\temail: '{Email}'" +
             $"\n\ttype: '{Type}'";
 
-    public static bool SelectMemberTypeUsingMenuSelector(out MemberType result,
+    public static bool SelectType(out MemberType result,
         string message = "Use the arrow keys to navigate and press Enter to select member type:")
     {
         string selectedMemberTypeInput = MenuSelector.SelectOption(MemberTypeNames, message);
