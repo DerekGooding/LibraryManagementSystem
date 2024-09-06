@@ -53,13 +53,13 @@ internal static class MainMenu
 
     private static void LibraryDetails(LibManagementSystem library)
     {
-        WriteLine($"Total Books: {library.BooksCount}");
+        WriteLine($"Total Books:    {library.BooksCount}");
         WriteLine($"Physical books: {library.PhysicalBookCount} of which {library.BorrowedPhysicalBooks} are borrowed");
-        WriteLine($"E-books: {library.EBookCount} of which {library.BorrowedEBooks} are borrowed");
+        WriteLine($"E-books:        {library.EBookCount} of which {library.BorrowedEBooks} are borrowed");
         WriteLine();
-        WriteLine($"Total Members: {library.MembersCount}");
-        WriteLine($"Teachers: {library.TeacherCount}");
-        WriteLine($"Students: {library.StudentCount}");
+        WriteLine($"Total Members:  {library.MembersCount}");
+        WriteLine($"Teachers:       {library.TeacherCount}");
+        WriteLine($"Students:       {library.StudentCount}");
         WriteLine();
         ReadKey();
     }
