@@ -8,3 +8,10 @@
 
 ## My Portfolio Website
 Check out my portfolio website at [www.aniketbhalla.com](https://www.aniketbhalla.com)
+
+## Future ideas
+1. Review list of users/emails/book authors
+2. Search functionality by keyword and wildcards
+3. SQLite database to save entries
+4. Unit Testing
+5. UI alternative to Console
