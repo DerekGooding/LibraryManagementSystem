@@ -13,4 +13,26 @@ internal class Menu(List<MenuOption>? options = null)
     internal int Count => Options.Count;
 
     public string Print() => string.Join('\n', CheckedOptions.Select(x => x.Print()));
+
+    public void Ask()
+    {
+        if (Count == 0) return;
+
+        WriteLine(Print());
+        MenuOption? choice = null;
+
+        while (choice == null)
+        {
+            string? line = ReadLine();
+            choice = Find(x => string.Equals(x.Key, line, StringComparison.OrdinalIgnoreCase));
+            if (choice == null)
+            {
+                WriteLine("Not a valid choice\n");
+            }
+            else
+            {
+                choice.Invoke();
+            }
+        }
+    }
 }
