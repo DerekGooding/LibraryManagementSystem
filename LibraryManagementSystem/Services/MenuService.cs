@@ -11,12 +11,22 @@ internal static class MenuService
 
     public static void Start()
     {
-        LibManagementSystem library = new();
-
         WriteLine("============= WELCOME TO LIBRARY MANAGEMENT SYSTEM ==============\n");
 
+        Menu menu = MainMenu();
+
+        while (true)
+        {
+            WriteLine("[MENU]:");
+            menu.Ask();
+            Clear();
+        }
+    }
+
+    private static Menu MainMenu()
+    {
+        LibManagementSystem library = new();
         Menu menu = new();
-        WriteLine("[MENU]:");
         menu.Add(new("X", "Exit", () => Environment.Exit(0)));
         menu.Add(new("1", "Add Book", () =>
         {
@@ -48,11 +58,7 @@ internal static class MenuService
         menu.Add(new("12", "Total Teacher Members Count", () => Info($"Total members count: {library.TotalTeacherMembersCount}")));
         menu.Add(new("13", "Total Student Members Count", () => Info($"Total members count: {library.TotalStudentMembersCount}")));
 
-        while (true)
-        {
-            menu.Ask();
-            Clear();
-        }
+        return menu;
     }
 
     private static void Info(string text)
