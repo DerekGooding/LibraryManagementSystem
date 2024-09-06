@@ -77,25 +77,17 @@ internal class LibManagementSystem : ILibraryService
         }
     }
 
-    private bool FindMemberByEmail(string email, out Member result)
+    private bool FindMemberByEmail(string email, out Member? result)
     {
-        bool operationSuccess = false;
         result = null;
 
-        if (!Validator.IsEmail(email))
-            return operationSuccess;
+        if (!Validator.IsEmail(ref email))
+            return false;
 
         email = email.Trim();
+        result = Members.FirstOrDefault(m => m.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
 
-        // checking if member exists
-        Member member = Members.FirstOrDefault(m => m.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
-        if (member != null)
-        {
-            operationSuccess = true;
-            result = member;
-        }
-
-        return operationSuccess;
+        return result != null;
     }
 
     public void AddBook()
@@ -122,37 +114,27 @@ internal class LibManagementSystem : ILibraryService
         string bookShelfLocation = Ask("Enter book shelfLocation: ");
         Book newBook = new PhysicalBook(title: title, author: author, shelfLocation: bookShelfLocation);
 
-        WriteLine(!Books.Add(newBook)
-                ? "[ALERT]: Physical book with the following details already exists in the system!!"
-                : "[SUCCESS] : Physical book has been successfully added to the system!!)");
+        WriteLine(Books.Add(newBook)
+                ? "[SUCCESS] : Physical book has been successfully added to the system!!)"
+                : "[ALERT]: Physical book with the following details already exists in the system!!");
         WriteLine(newBook);
     }
     private void HandleAddEBook(string title, string author)
     {
-        string downloadLinkInput = Ask("Enter book download link: ");
+        string link = Ask("Enter book download link: ", isUrl: true);
+        Book newBook = new EBook(title: title, author: author, downloadLink: link);
 
-        bool isValidDownloadLink = Validator.IsURL(downloadLinkInput, out string downloadLink);
-        if (!isValidDownloadLink)
-        {
-            WriteLine($"[Invalid Input]: book download link URL is invalid, entered value = '{downloadLinkInput}'");
-        }
-        else
-        {
-            Book newBook = new EBook(title: title, author: author, downloadLink: downloadLink);
-
-            // checking if book already exists in the "books" hash set, if not book added then it already exists
-            WriteLine(!Books.Add(newBook)
-                ? "[ALERT]: E-book book with the following details already exists in the system!!"
-                : "[SUCCESS] : E-book book has been successfully added to the system!!)");
-            WriteLine(newBook);
-        }
+        WriteLine(Books.Add(newBook)
+            ? "[SUCCESS] : E-book book has been successfully added to the system!!)"
+            : "[ALERT]: E-book book with the following details already exists in the system!!");
+        WriteLine(newBook);
     }
 
     public void BorrowBook()
     {
         string email = Ask("Enter member email: ", isEmail: true);
 
-        if (!FindMemberByEmail(email, out Member member))
+        if (!FindMemberByEmail(email, out Member? member))
         {
             WriteLine($"[NOT FOUND ERROR]: Operation failed because member with email = '{email}' doesn't exists in the system");
             WriteLine("[SYSTEM SUGGESTION]: Signup by creating a new member in the system");
@@ -196,7 +178,7 @@ internal class LibManagementSystem : ILibraryService
     {
         string memberEmail = Ask("Enter member email: ", isEmail: true);
 
-        if (!FindMemberByEmail(memberEmail, out Member member))
+        if (!FindMemberByEmail(memberEmail, out Member? member))
         {
             WriteLine($"[NOT FOUND ERROR]: Operation failed because member with email = '{memberEmail}' doesn't exists in the system");
             WriteLine("[SYSTEM SUGGESTION]: Signup by creating a new member in the system");
@@ -250,10 +232,10 @@ internal class LibManagementSystem : ILibraryService
     /// Continues to loop requests from the user until a valid entry is entered
     /// </summary>
     /// <param name="request">What the user is prompt</param>
-    /// <param name="isUrl">Adds a validation step to see if this is a valid url</param>
     /// <param name="isEmail">Adds a validation step to see if this is a valid email</param>
+    /// <param name="isUrl">Adds a validation step to see if this is a valid url</param>
     /// <returns>The user's valid response</returns>
-    private string Ask(string request, bool isUrl = false, bool isEmail = false)
+    private string Ask(string request, bool isEmail = false, bool isUrl = false)
     {
         Write(request);
         string response = ReadLine().Trim().ToLower();
@@ -264,9 +246,15 @@ internal class LibManagementSystem : ILibraryService
             return Ask(request);
         }
 
-        if(isEmail && !Validator.IsEmail(response))
+        if(isEmail && !Validator.IsEmail(ref response))
         {
             WriteLine($"[INVAID INPUT]: Received invalid email, entered value = '{response}'");
+            return Ask(request);
+        }
+
+        if (isUrl && !Validator.IsURL(ref response))
+        {
+            WriteLine($"[Invalid Input]: book download link URL is invalid, entered value = '{response}'");
             return Ask(request);
         }
 

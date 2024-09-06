@@ -43,7 +43,7 @@ internal abstract class Member
     public string Email
     {
         get => _email;
-        private set => _email = !Validator.IsEmail(value)
+        private set => _email = !Validator.IsEmail(ref value)
                 ? throw new ArgumentException($"Can't set an invalid email: '{value}' while creating system member.")
                 : value.Trim().ToLower();
     }

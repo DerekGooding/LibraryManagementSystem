@@ -4,35 +4,18 @@ namespace LibraryManagementSystem.Utils;
 
 internal static partial class Validator
 {
-    public static bool IsURL(string url, out string result)
+    public static bool IsURL(ref string url)
     {
-        bool isValid = false;
-        result = string.Empty;
+        url = url.Trim();
 
-        // Check for null, empty, or whitespace string
-        if (string.IsNullOrWhiteSpace(url))
-            return isValid;
-
-        // Validating URL using the generated regex
-        if (GetUrlRegex().IsMatch(url))
-        {
-            isValid = true;
-            result = url.Trim();
-        }
-
-        return isValid;
+        return !string.IsNullOrWhiteSpace(url) && GetUrlRegex().IsMatch(url);
     }
 
-    public static bool IsEmail(string email)
+    public static bool IsEmail(ref string email)
     {
-        // if email is null, empty or white space then return false
-        if (string.IsNullOrWhiteSpace(email))
-            return false;
-
         email = email.Trim().ToLower();
 
-        // Validating email using the generated regex
-        return GetEmailRegex().IsMatch(email);
+        return !string.IsNullOrWhiteSpace(email) && GetEmailRegex().IsMatch(email);
     }
 
     // Generated regex for validating URLs
