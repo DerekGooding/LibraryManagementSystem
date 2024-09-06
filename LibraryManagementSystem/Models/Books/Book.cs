@@ -76,7 +76,7 @@ internal abstract class Book
         return hashTitle ^ hashAuthor ^ (hashType * 17);
     }
 
-    public static bool IsValidBookId(string bookId)
+    public static bool IsValidId(string bookId)
     {
         if (string.IsNullOrWhiteSpace(bookId)) return false;
 
@@ -85,14 +85,14 @@ internal abstract class Book
         return bookId.Length == BOOK_ID_LENGTH;
     }
 
-    public static BookType? SelectBookTypeUsingMenuSelector(string message = "Use the arrow keys to navigate and press Enter to select book type:")
+    public static BookType? SelectType(string message = "Use the arrow keys to navigate and press Enter to select book type:")
     {
         string selectedBookTypeInput = MenuSelector.SelectOption(BookTypeNames, message);
         bool isValidSelectedBookType = Enum.TryParse(selectedBookTypeInput, false, out BookType validBookType);
         return isValidSelectedBookType ? null : validBookType;
     }
 
-    public void BorrowBook() => IsBorrowed = true;
+    public void Borrow() => IsBorrowed = true;
 
-    public void ReturnBook() => IsBorrowed = false;
+    public void Return() => IsBorrowed = false;
 }

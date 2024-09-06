@@ -4,7 +4,7 @@ namespace LibraryManagementSystem.Utils;
 
 internal static partial class Validator
 {
-    public static bool IsValidURL(string url, out string result)
+    public static bool IsURL(string url, out string result)
     {
         bool isValid = false;
         result = string.Empty;
@@ -23,7 +23,7 @@ internal static partial class Validator
         return isValid;
     }
 
-    public static bool IsValidEmail(string email)
+    public static bool IsEmail(string email)
     {
         // if email is null, empty or white space then return false
         if (string.IsNullOrWhiteSpace(email))

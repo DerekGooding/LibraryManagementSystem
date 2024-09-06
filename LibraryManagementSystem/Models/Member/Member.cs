@@ -44,7 +44,7 @@ internal abstract class Member
         get => _email;
         private set
         {
-            if (!Validator.IsValidEmail(value))
+            if (!Validator.IsEmail(value))
                 throw new ArgumentException($"Can't set an invalid email: '{value}' while creating system member.");
 
             _email = value.Trim().ToLower();
@@ -83,7 +83,7 @@ internal abstract class Member
     {
         validationError = false;
 
-        if (!Book.IsValidBookId(bookId))
+        if (!Book.IsValidId(bookId))
         {
             validationError = true;
             return false;
@@ -96,7 +96,7 @@ internal abstract class Member
     {
         validationError = false;
 
-        if (!Book.IsValidBookId(bookId))
+        if (!Book.IsValidId(bookId))
         {
             validationError = true;
             return false;

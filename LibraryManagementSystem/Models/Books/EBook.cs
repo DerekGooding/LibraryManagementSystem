@@ -13,7 +13,7 @@ internal class EBook : Book
             $"\n\tdownload link: '{DownloadLink}'";
 
     private static string ValidateURL(string url)
-        => Validator.IsValidURL(url, out string result)
+        => Validator.IsURL(url, out string result)
             ? result.Trim()
             : throw new ArgumentException("Invalid URL can't be set as a download link of an EBook");
 

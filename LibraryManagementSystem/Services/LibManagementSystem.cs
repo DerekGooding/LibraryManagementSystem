@@ -54,7 +54,7 @@ internal class LibManagementSystem : ILibraryService
         string email = ReadLine().Trim();
 
         // validation: email input
-        if (!Validator.IsValidEmail(email))
+        if (!Validator.IsEmail(email))
         {
             WriteLine($"[INVAID INPUT]: Received invalid email, entered value = '{email}'");
             return;
@@ -108,7 +108,7 @@ internal class LibManagementSystem : ILibraryService
         bool operationSuccess = false;
         result = null;
 
-        if (!Validator.IsValidEmail(email))
+        if (!Validator.IsEmail(email))
             return operationSuccess;
 
         email = email.Trim();
@@ -129,8 +129,7 @@ internal class LibManagementSystem : ILibraryService
         string title = Ask("Enter book title: ");
         string author =  Ask("Enter book author: ");
 
-        // book type input
-        switch (Book.SelectBookTypeUsingMenuSelector())
+        switch (Book.SelectType())
         {
             case Book.BookType.Physical:
                 HandleAddPhysical(title, author);
@@ -158,7 +157,7 @@ internal class LibManagementSystem : ILibraryService
     {
         string downloadLinkInput = Ask("Enter book download link: ");
 
-        bool isValidDownloadLink = Validator.IsValidURL(downloadLinkInput, out string downloadLink);
+        bool isValidDownloadLink = Validator.IsURL(downloadLinkInput, out string downloadLink);
         if (!isValidDownloadLink)
         {
             WriteLine($"[Invalid Input]: book download link URL is invalid, entered value = '{downloadLinkInput}'");
@@ -177,180 +176,89 @@ internal class LibManagementSystem : ILibraryService
 
     public void BorrowBook()
     {
-        // member email input
-        Write("Enter member email: ");
-        string memberEmail = ReadLine().Trim();
-
-        // validation: member email input
-        if (!Validator.IsValidEmail(memberEmail))
-        {
-            WriteLine($"[INVALID INPUT]: Received invalid email, entered value = '{memberEmail}'");
-            return;
-        }
+        string email = Ask("Enter member email: ", isEmail: true);
 
         // checking if member exists
-        bool memberExists = FindMemberByEmail(memberEmail, out Member member);
-        if (!memberExists)
+        if (!FindMemberByEmail(email, out Member member))
         {
-            WriteLine($"[NOT FOUND ERROR]: Operation failed because member with email = '{memberEmail}' doesn't exists in the system");
+            WriteLine($"[NOT FOUND ERROR]: Operation failed because member with email = '{email}' doesn't exists in the system");
             WriteLine("[SYSTEM SUGGESTION]: Signup by creating a new member in the system");
+            ReadKey();
             return;
         }
 
-        // asking book details
-        // book title input
-        Write("Enter book title: ");
-        string bookTitle = ReadLine().Trim().ToLower();
+        string title = Ask("Enter book title: ");
+        string author = Ask("Enter book author: ");
+        Book.BookType? bookType = Book.SelectType();
+        Book book = Books.FirstOrDefault(_book => _book.Title.Equals(title) && _book.Author.Equals(author) && _book.Type.Equals(bookType));
 
-        // validating book title
-        if (string.IsNullOrWhiteSpace(bookTitle))
-        {
-            WriteLine($"[Invalid Input]: book title can't be empty, or only contains whitespace, entered value = '{bookTitle}'");
-            return;
-        }
-
-        // book author input
-        Write("Enter book author: ");
-        string bookAuthor = ReadLine().Trim().ToLower();
-
-        // validating book author
-        if (string.IsNullOrWhiteSpace(bookAuthor))
-        {
-            WriteLine($"[Invalid Input]: book author can't be empty, or only contains whitespace, entered value = '{bookAuthor}'");
-            return;
-        }
-
-        // book type input
-        bool bookTypeSelectionSuccess = Book.SelectBookTypeUsingMenuSelector(out Book.BookType selectedBookType);
-
-        // system error
-        if (!bookTypeSelectionSuccess)
+        if (bookType == null)
         {
             WriteLine("[ERROR]: Error while book type selection.");
-            return;
         }
-
-        // checking if book exists with given book details
-        Book book = Books.FirstOrDefault(_book => _book.Title.Equals(bookTitle) && _book.Author.Equals(bookAuthor) && _book.Type.Equals(selectedBookType));
-        if (book == null)
+        else if (book == null)
         {
             WriteLine("[NOT FOUND]: book with entered details doesn't exist in the system!!");
-            return;
         }
-
-        // check if book has already been borrowed
-        if (book.IsBorrowed)
+        else if (book.IsBorrowed)
         {
             WriteLine("[ALERT]: book with entered details has already been borrowed!!");
-            return;
         }
-
-        // Add book to the 'borrowed books list' of member
-        bool memberBorrowBookOperationSuccess = member.BorrowBook(bookId: book.BookId, out bool validationError);
-        if (!memberBorrowBookOperationSuccess)
+        else if (!member.BorrowBook(bookId: book.BookId, out bool validationError))
         {
-            if (validationError)
-            {
-                WriteLine("[SYSTEM ERROR]: Error while borrowing book to member");
-                return;
-            }
-            WriteLine("[ALERT]: Book with given details has already been borrowed by the member");
-            return;
+            WriteLine(validationError
+                ? "[SYSTEM ERROR]: Error while borrowing book to member"
+                : "[ALERT]: Book with given details has already been borrowed by the member");
+        }
+        else
+        {
+            book.Borrow();
+            WriteLine($"[SUCCESS]: Book with title: '{title}' has been successfully borrowed by member with name: '{member.Name}' and email: '{member.Email}'");
         }
 
-        // set book isBorrowed to true
-        book.BorrowBook();
-
-        WriteLine($"[SUCCESS]: Book with title: '{bookTitle}' has been successfully borrowed by member with name: '{member.Name}' and email: '{member.Email}'");
+        ReadKey();
     }
 
     public void ReturnBook()
     {
-        // member email input
-        Write("Enter member email: ");
-        string memberEmail = ReadLine().Trim();
+        string memberEmail = Ask("Enter member email: ", isEmail: true);
 
-        // validation: member email input
-        if (!Validator.IsValidEmail(memberEmail))
-        {
-            WriteLine($"[INVALID INPUT]: Received invalid email, entered value = '{memberEmail}'");
-            return;
-        }
-
-        // checking if member exists
-        bool memberExists = FindMemberByEmail(memberEmail, out Member member);
-        if (!memberExists)
+        if (!FindMemberByEmail(memberEmail, out Member member))
         {
             WriteLine($"[NOT FOUND ERROR]: Operation failed because member with email = '{memberEmail}' doesn't exists in the system");
             WriteLine("[SYSTEM SUGGESTION]: Signup by creating a new member in the system");
             return;
         }
 
-        // asking book details
-        // book title input
-        Write("Enter book title: ");
-        string bookTitle = ReadLine().Trim().ToLower();
+        string title = Ask("Enter book title: ");
+        string author = Ask("Enter book author: ");
+        Book.BookType? bookType = Book.SelectType();
+        Book book = Books.FirstOrDefault(_book => _book.Title.Equals(title) && _book.Author.Equals(author) && _book.Type.Equals(bookType));
 
-        // validating book title
-        if (string.IsNullOrWhiteSpace(bookTitle))
-        {
-            WriteLine($"[Invalid Input]: book title can't be empty, or only contains whitespace, entered value = '{bookTitle}'");
-            return;
-        }
-
-        // book author input
-        Write("Enter book author: ");
-        string bookAuthor = ReadLine().Trim().ToLower();
-
-        // validating book author
-        if (string.IsNullOrWhiteSpace(bookAuthor))
-        {
-            WriteLine($"[Invalid Input]: book author can't be empty, or only contains whitespace, entered value = '{bookAuthor}'");
-            return;
-        }
-
-        // book type input
-        bool bookTypeSelectionSuccess = Book.SelectBookTypeUsingMenuSelector(out Book.BookType selectedBookType);
-
-        // system error
-        if (!bookTypeSelectionSuccess)
+        if (bookType == null)
         {
             WriteLine("[ERROR]: Error while book type selection.");
-            return;
         }
-
-        // checking if book exists with given book details
-        Book book = Books.FirstOrDefault(_book => _book.Title.Equals(bookTitle) && _book.Author.Equals(bookAuthor) && _book.Type.Equals(selectedBookType));
-        if (book == null)
+        else if (book == null)
         {
             WriteLine("[NOT FOUND]: book with entered details doesn't exist in the system!!");
-            return;
         }
-
-        // check if book was previously borrowed or not
-        if (!book.IsBorrowed)
+        else if (!book.IsBorrowed)
         {
             WriteLine("[ERROR]: book with entered details was never borrowed!!");
-            return;
         }
-
-        //  check if book borrowed by member by trying to return book
-        string bookId = book.BookId;
-        if (!member.TryReturnBook(bookId, out bool validationError))
+        else if (!member.TryReturnBook(book.BookId, out bool validationError))
         {
-            if (validationError)
-            {
-                WriteLine("[SYSTEM ERROR]: Error while doing operation");
-                return;
-            }
-
-            WriteLine("[ERROR]: Book wasn't borrowed by you!!");
-            return;
+            WriteLine(validationError
+                ? "[SYSTEM ERROR]: Error while doing operation"
+                : "[ERROR]: Book wasn't borrowed by you!!");
         }
-
-        book.ReturnBook();
-
-        WriteLine($"Book with given details and borrowed by '{member.Name}' has been successfully returned!");
+        else
+        {
+            book.Return();
+            WriteLine($"Book with given details and borrowed by '{member.Name}' has been successfully returned!");
+        }
+        ReadKey();
     }
 
     public void ConsoleAllBookTitles()
@@ -364,7 +272,14 @@ internal class LibManagementSystem : ILibraryService
         ReadKey();
     }
 
-    private string Ask(string request)
+    /// <summary>
+    /// Continues to loop requests from the user until a valid entry is entered
+    /// </summary>
+    /// <param name="request">What the user is prompt</param>
+    /// <param name="isUrl">Adds a validation step to see if this is a valid url</param>
+    /// <param name="isEmail">Adds a validation step to see if this is a valid email</param>
+    /// <returns>The user's valid response</returns>
+    private string Ask(string request, bool isUrl = false, bool isEmail = false)
     {
         Write(request);
         string response = ReadLine().Trim().ToLower();
@@ -372,6 +287,12 @@ internal class LibManagementSystem : ILibraryService
         if (string.IsNullOrWhiteSpace(response))
         {
             WriteLine($"[Invalid Input]: value can't be empty, or only contains whitespace, entered value = '{response}'");
+            return Ask(request);
+        }
+
+        if(isEmail && !Validator.IsEmail(response))
+        {
+            WriteLine($"[INVAID INPUT]: Received invalid email, entered value = '{response}'");
             return Ask(request);
         }
 
