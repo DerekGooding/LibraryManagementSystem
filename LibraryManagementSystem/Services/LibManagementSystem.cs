@@ -178,7 +178,6 @@ internal class LibManagementSystem : ILibraryService
     {
         string email = Ask("Enter member email: ", isEmail: true);
 
-        // checking if member exists
         if (!FindMemberByEmail(email, out Member member))
         {
             WriteLine($"[NOT FOUND ERROR]: Operation failed because member with email = '{email}' doesn't exists in the system");
@@ -227,6 +226,7 @@ internal class LibManagementSystem : ILibraryService
         {
             WriteLine($"[NOT FOUND ERROR]: Operation failed because member with email = '{memberEmail}' doesn't exists in the system");
             WriteLine("[SYSTEM SUGGESTION]: Signup by creating a new member in the system");
+            ReadKey();
             return;
         }
 
