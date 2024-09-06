@@ -29,16 +29,13 @@ internal class LibManagementSystem : ILibraryService
         string firstName = Ask("Enter first name: ");
         string lastName = Ask("Enter last name: ");
         string email = Ask("Enter email: ", isEmail: true);
+        Member.MemberType? memberType = Member.SelectType();
 
-        if (!Member.SelectType(out Member.MemberType memberType))
+        if (memberType == null)
         {
             WriteLine("[ERROR]: Error while selecting member type");
-            ReadKey();
-            return;
         }
-
-        // registering members according to selected member type
-        if (memberType == Member.MemberType.Student)
+        else if (memberType == Member.MemberType.Student)
         {
             HandleAddStudent(firstName, lastName, email);
         }
@@ -180,7 +177,7 @@ internal class LibManagementSystem : ILibraryService
         {
             WriteLine("[ALERT]: book with entered details has already been borrowed!!");
         }
-        else if (!member.BorrowBook(bookId: book.BookId, out bool validationError))
+        else if (!member.BorrowBook(id: book.BookId, out bool validationError))
         {
             WriteLine(validationError
                 ? "[SYSTEM ERROR]: Error while borrowing book to member"

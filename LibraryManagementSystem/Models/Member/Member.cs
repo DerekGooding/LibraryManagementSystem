@@ -6,13 +6,14 @@ namespace LibraryManagementSystem.Models.Member;
 // uniqueness = email
 internal abstract class Member
 {
+    public const int MEMBER_ID_LENGTH = 8;
+
     public enum MemberType
     {
         Student,
         Teacher
     }
 
-    private const int MEMBER_ID_LENGTH = 8;
     private string _firstName = string.Empty;
     private string _lastName = string.Empty;
     private string _email = string.Empty; // unique prop
@@ -42,13 +43,9 @@ internal abstract class Member
     public string Email
     {
         get => _email;
-        private set
-        {
-            if (!Validator.IsEmail(value))
-                throw new ArgumentException($"Can't set an invalid email: '{value}' while creating system member.");
-
-            _email = value.Trim().ToLower();
-        }
+        private set => _email = !Validator.IsEmail(value)
+                ? throw new ArgumentException($"Can't set an invalid email: '{value}' while creating system member.")
+                : value.Trim().ToLower();
     }
 
     protected Member(string firstName, string lastName, string email, MemberType type)
@@ -70,57 +67,31 @@ internal abstract class Member
             $"\n\temail: '{Email}'" +
             $"\n\ttype: '{Type}'";
 
-    public static bool SelectType(out MemberType result,
-        string message = "Use the arrow keys to navigate and press Enter to select member type:")
+    public static MemberType? SelectType(string message = "Use the arrow keys to navigate and press Enter to select member type:")
     {
-        string selectedMemberTypeInput = MenuSelector.SelectOption(MemberTypeNames, message);
-        bool isValidSelectedMemberType = Enum.TryParse(selectedMemberTypeInput, false, out MemberType validMemberType);
-        result = validMemberType;
-        return isValidSelectedMemberType;
+        string input = MenuSelector.SelectOption(MemberTypeNames, message);
+        bool isValidType = Enum.TryParse(input, false, out MemberType memberType);
+        return isValidType ? memberType : null;
     }
 
-    public bool FindIfBookBorrowedByMemberByBooKId(string bookId, out bool validationError)
+    public bool FindIfBookBorrowedByMemberByBooKId(string id, out bool error)
     {
-        validationError = false;
+        error = !Book.IsValidId(id);
 
-        if (!Book.IsValidId(bookId))
-        {
-            validationError = true;
-            return false;
-        }
-
-        return BorrowedBookIds.Contains(bookId);
+        return !error && BorrowedBookIds.Contains(id);
     }
 
-    public bool TryReturnBook(string bookId, out bool validationError)
+    public bool TryReturnBook(string id, out bool error)
     {
-        validationError = false;
+        error = !Book.IsValidId(id);
 
-        if (!Book.IsValidId(bookId))
-        {
-            validationError = true;
-            return false;
-        }
-
-        return BorrowedBookIds.Remove(bookId);
+        return !error && BorrowedBookIds.Remove(id);
     }
 
-    public bool BorrowBook(string bookId, out bool validationError)
+    public bool BorrowBook(string id, out bool error)
     {
-        validationError = false;
+        error = string.IsNullOrWhiteSpace(id) || id.Length != Book.BOOK_ID_LENGTH;
 
-        if (string.IsNullOrWhiteSpace(bookId))
-        {
-            validationError = true;
-            return false;
-        }
-
-        if (bookId.Length != 8)
-        {
-            validationError = true;
-            return false;
-        }
-
-        return BorrowedBookIds.Add(bookId);
+        return !error && BorrowedBookIds.Add(id);
     }
 }

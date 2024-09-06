@@ -5,7 +5,7 @@ namespace LibraryManagementSystem.Models.Books;
 // uniqueness = title + author + type
 internal abstract class Book
 {
-    private const int BOOK_ID_LENGTH = 8;
+    public const int BOOK_ID_LENGTH = 8;
 
     public enum BookType
     {
@@ -22,23 +22,17 @@ internal abstract class Book
     public string Title
     {
         get => _title;
-        protected set
-        {
-            if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentNullException($"Trying to set invalid book's title = '{value}'");
-            _title = value.Trim().ToLower();
-        }
+        protected set => _title = string.IsNullOrWhiteSpace(value)
+                ? throw new ArgumentNullException($"Trying to set invalid book's title = '{value}'")
+                : value.Trim().ToLower();
     }
 
     public string Author
     {
         get => _author;
-        protected set
-        {
-            if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentNullException($"Trying to set invalid book's author name = '{value}'");
-            _author = value.Trim();
-        }
+        protected set => _author = string.IsNullOrWhiteSpace(value)
+                ? throw new ArgumentNullException($"Trying to set invalid book's author name = '{value}'")
+                : value.Trim();
     }
 
     public string ISBN { get; } = CustomUtils.GenerateUniqueID();
@@ -57,15 +51,7 @@ internal abstract class Book
             $"\n\ttype: {Type}";
 
     // uniqueness = title + author + type
-    public override bool Equals(object obj)
-    {
-        if (obj is Book otherBook)
-        {
-            // check if both book's title, author and type are same or not
-            return otherBook.Title.Equals(Title) && otherBook.Author.Equals(Author) && otherBook.Type == Type;
-        }
-        return false;
-    }
+    public override bool Equals(object obj) => obj is Book otherBook && otherBook.Title.Equals(Title) && otherBook.Author.Equals(Author) && otherBook.Type == Type;
 
     public override int GetHashCode()
     {
