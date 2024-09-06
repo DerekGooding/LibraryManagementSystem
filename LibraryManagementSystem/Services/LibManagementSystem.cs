@@ -126,122 +126,54 @@ internal class LibManagementSystem : ILibraryService
 
     public void AddBook()
     {
-        // book title input
-        Write("Enter book title: ");
-        string bookTitle = ReadLine().Trim().ToLower();
-
-        // validating book title
-        if (string.IsNullOrWhiteSpace(bookTitle))
-        {
-            WriteLine($"[Invalid Input]: book title can't be empty, or only contains whitespace, entered value = '{bookTitle}'");
-            return;
-        }
-
-        // book author input
-        Write("Enter book author: ");
-        string BookAuthor = ReadLine().Trim().ToLower();
-
-        // validating book author
-        if (string.IsNullOrWhiteSpace(BookAuthor))
-        {
-            WriteLine($"[Invalid Input]: book author can't be empty, or only contains whitespace, entered value = '{BookAuthor}'");
-            return;
-        }
+        string title = Ask("Enter book title: ");
+        string author =  Ask("Enter book author: ");
 
         // book type input
-        bool bookTypeSelectionSuccess = Book.SelectBookTypeUsingMenuSelector(out Book.BookType selectedBookType);
-
-        if (!bookTypeSelectionSuccess)
+        switch (Book.SelectBookTypeUsingMenuSelector())
         {
-            WriteLine("[ERROR]: Error while book type selection.");
-            return;
+            case Book.BookType.Physical:
+                HandleAddPhysical(title, author);
+                break;
+            case Book.BookType.EBook:
+                HandleAddEBook(title, author);
+                break;
+            default:
+                WriteLine("[ERROR]: Error during book type selection.");
+                break;
         }
+        ReadKey();
+    }
+    private void HandleAddPhysical(string title, string author)
+    {
+        string bookShelfLocation = Ask("Enter book shelfLocation: ");
+        Book newBook = new PhysicalBook(title: title, author: author, shelfLocation: bookShelfLocation);
 
-        // taking actions according to selected book type
-        if (selectedBookType.Equals(Book.BookType.Physical))  // for physical book creation
+        WriteLine(!Books.Add(newBook)
+                ? "[ALERT]: Physical book with the following details already exists in the system!!"
+                : "[SUCCESS] : Physical book has been successfully added to the system!!)");
+        WriteLine(newBook);
+    }
+    private void HandleAddEBook(string title, string author)
+    {
+        string downloadLinkInput = Ask("Enter book download link: ");
+
+        bool isValidDownloadLink = Validator.IsValidURL(downloadLinkInput, out string downloadLink);
+        if (!isValidDownloadLink)
         {
-            // book shelfLocation input
-            Write("Enter book shelfLocation: ");
-            string bookShelfLocation = ReadLine().Trim();
-
-            // validating book shelfLocation
-            if (string.IsNullOrWhiteSpace(bookShelfLocation))
-            {
-                WriteLine($"[Invalid Input]: book shelfLocation can't be empty, or only contains whitespace, entered value = '{bookShelfLocation}'");
-                return;
-            }
-
-            Book newBook = new PhysicalBook(title: bookTitle, author: BookAuthor, shelfLocation: bookShelfLocation);
-            bool bookAdded = Books.Add(newBook);
-
-            // checking if book already exists in the "books" hash set, if not book added then it already exists
-            if (!bookAdded)
-            {
-                WriteLine("[ALERT]: Physical book with the following details already exists in the system!!");
-                WriteLine(newBook);
-                return;
-            }
-
-            WriteLine("[SUCCESS]: Physical book has been successfully added to the system!!");
-            WriteLine(newBook);
-        }
-        else if (selectedBookType.Equals(Book.BookType.EBook))  // for e-book creation
-        {
-            // book download link input
-            Write("Enter book download link: ");
-            string downloadLinkInput = ReadLine().Trim();
-
-            // validating book  download link, can't be empty or contains whitespace only
-            if (string.IsNullOrWhiteSpace(downloadLinkInput))
-            {
-                WriteLine($"[Invalid Input]: book download link can't be empty, or only contains whitespace, entered value = '{downloadLinkInput}'");
-                return;
-            }
-
-            // validating book download link, URL validation
-            bool isValidDownloadLink = Validator.IsValidURL(downloadLinkInput, out string downloadLink);
-            if (!isValidDownloadLink)
-            {
-                WriteLine($"[Invalid Input]: book download link URL is invalid, entered value = '{downloadLinkInput}'");
-                return;
-            }
-
-            Book newBook = new EBook(title: bookTitle, author: BookAuthor, downloadLink: downloadLink);
-            bool bookAdded = Books.Add(newBook);
-
-            // checking if book already exists in the "books" hash set, if not book added then it already exists
-            if (!bookAdded)
-            {
-                WriteLine("[ALERT]: E-book with the following details already exists in the system!!");
-                WriteLine(newBook);
-                return;
-            }
-
-            WriteLine("[SUCCESS]: E-book has been successfully added to the system!!");
-            WriteLine(newBook);
+            WriteLine($"[Invalid Input]: book download link URL is invalid, entered value = '{downloadLinkInput}'");
         }
         else
         {
-            WriteLine("[ERROR]: Received invalid member type while registering member in the system.");
-            return;
+            Book newBook = new EBook(title: title, author: author, downloadLink: downloadLink);
+
+            // checking if book already exists in the "books" hash set, if not book added then it already exists
+            WriteLine(!Books.Add(newBook)
+                ? "[ALERT]: E-book book with the following details already exists in the system!!"
+                : "[SUCCESS] : E-book book has been successfully added to the system!!)");
+            WriteLine(newBook);
         }
     }
-
-    /*
-         *  Flow:
-         *  - input member email with email validation, if member exists then book can be borrowed and if not, then not
-         *  - if member exists, ask book details
-         *  -   input title, author and type with their validation
-         *      - check if book exists
-         *          -   if exists,
-         *              -   check if book has already been borrowed or not
-         *                  - if yes
-         *                      - alert user
-         *                  - if not
-         *                      - borrow book method on book
-         *                      - add book id to the borrowed books list of member
-         *          -   if not, then alert user
-    */
 
     public void BorrowBook()
     {
@@ -331,22 +263,6 @@ internal class LibManagementSystem : ILibraryService
 
         WriteLine($"[SUCCESS]: Book with title: '{bookTitle}' has been successfully borrowed by member with name: '{member.Name}' and email: '{member.Email}'");
     }
-
-    /*
-      *  -  Take member email input with email validation
-      *  -  Check if member exists
-      *     -   if member exists
-      *         -   ask book details: title, author and type with validation and check if book exists
-      *             -   if book exists
-      *                 -   check if book was previously borrowed or not
-      *                     -   if book was borrowed, check if borrowed by member
-      *                         -   if book borrowed by member
-      *                             -   call returnBook method on both book and member
-      *                         -   if book not borrowed by member, alert user
-      *                 -   if book not borrowed, alert user
-      *             -   if book doesn't exist then alert user
-      *     -   if member doesn't exists, alert user to register
-      */
 
     public void ReturnBook()
     {
@@ -439,14 +355,26 @@ internal class LibManagementSystem : ILibraryService
 
     public void ConsoleAllBookTitles()
     {
-        if (BookTitles.Count == 0)
-        {
-            WriteLine("[ALERT]: No book titles found!!");
-            return;
-        }
+        WriteLine(BookTitles.Count == 0
+            ? "[ALERT]: No book titles found!!"
+            : "Book titles:");
 
-        WriteLine("Book titles:");
         foreach (string title in BookTitles)
             Write($"'{title}',\n");
+        ReadKey();
+    }
+
+    private string Ask(string request)
+    {
+        Write(request);
+        string response = ReadLine().Trim().ToLower();
+
+        if (string.IsNullOrWhiteSpace(response))
+        {
+            WriteLine($"[Invalid Input]: value can't be empty, or only contains whitespace, entered value = '{response}'");
+            return Ask(request);
+        }
+
+        return response;
     }
 }

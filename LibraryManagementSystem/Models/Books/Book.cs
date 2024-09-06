@@ -85,12 +85,11 @@ internal abstract class Book
         return bookId.Length == BOOK_ID_LENGTH;
     }
 
-    public static bool SelectBookTypeUsingMenuSelector(out BookType result, string message = "Use the arrow keys to navigate and press Enter to select book type:")
+    public static BookType? SelectBookTypeUsingMenuSelector(string message = "Use the arrow keys to navigate and press Enter to select book type:")
     {
         string selectedBookTypeInput = MenuSelector.SelectOption(BookTypeNames, message);
         bool isValidSelectedBookType = Enum.TryParse(selectedBookTypeInput, false, out BookType validBookType);
-        result = validBookType;
-        return isValidSelectedBookType;
+        return isValidSelectedBookType ? null : validBookType;
     }
 
     public void BorrowBook() => IsBorrowed = true;
