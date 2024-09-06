@@ -6,8 +6,8 @@ internal static class Program
 {
     private static void Main()
     {
-        MenuService.Start();
+        MainMenu.Start();
 
-        ReadLine();
+        ReadKey();
     }
 }
