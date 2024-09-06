@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace LibraryManagementSystem.Utils;
+﻿namespace LibraryManagementSystem.Utils;
 
 internal static class MenuSelector
 {
